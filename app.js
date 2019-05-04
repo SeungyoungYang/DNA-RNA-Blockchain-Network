@@ -110,8 +110,32 @@ app.get('/', function (req, res) {
 	res.render('index.html');
 });
 
-app.post('/', function (req, res) {
-	res.send('');
+app.post('/:channelName/chaincodes/:chaincodeName', async function (req, res) {
+	var peers = req.body.peers;
+	var chaincodeName = req.params.chaincodeName;
+	var channelName = req.params.channelName;
+	var fcn = req.body.fcn;
+	var args = req.body.args;
+
+	if (!chaincodeName) {
+		res.json(getErrorMessage('\'chaincodeName\''));
+		return;
+	}
+	if (!channelName) {
+		res.json(getErrorMessage('\'channelName\''));
+		return;
+	}
+	if (!fcn) {
+		res.json(getErrorMessage('\'fcn\''));
+		return;
+	}
+	if (!args) {
+		res.json(getErrorMessage('\'args\''));
+		return;
+	}
+
+	let message = await invoke.invokeChaincode(peers, channelName, chaincodeName, fcn, args, req.username, req.orgname);
+	res.send(message);
 });
 
 // Register and enroll user
