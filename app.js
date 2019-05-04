@@ -110,6 +110,10 @@ app.get('/', function (req, res) {
 	res.render('index.html');
 });
 
+app.post('/', function (req, res) {
+	res.send('');
+});
+
 // Register and enroll user
 app.post('/users', async function(req, res) {
 	var username = req.body.username;
