@@ -1,0 +1,12 @@
+<input type="button" id="button1" onclick="button1_click();" />
+<script>
+function button1_click() {
+	$.post('/test/mychannel/chaincodes/mycc', { peer: 'peer0.org1.example.com', fcn: 'query', args: '["a"]' }, function (data) {
+                                                alert(data.msg);
+                                        })
+
+}
+
+</script>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
