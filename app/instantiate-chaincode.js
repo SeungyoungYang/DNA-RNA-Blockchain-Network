@@ -58,7 +58,7 @@ const instantiateChaincode = async function(peers, channelName, chaincodeName, c
 					{ role: { name: 'member', mspId: 'Org2MSP' }}
 			        ],
 			        policy: {
-					'2-of':[{ 'signed-by': 0 }, { 'signed-by': 1 }]
+					'1-of':[{ 'signed-by': 0 }, { 'signed-by': 1 }]
 			        }
 		        }
 		};
@@ -112,7 +112,7 @@ const instantiateChaincode = async function(peers, channelName, chaincodeName, c
 					}, 60000);
 					eh.registerTxEvent(deployId, (tx, code, block_num) => {
 						logger.info('The chaincode instantiate transaction has been committed on peer %s',eh.getPeerAddr());
-						logger.info('Transaction %s has status of %s in blocl %s', tx, code, block_num);
+						logger.info('Transaction %s has status of %s in block %s', tx, code, block_num);
 						clearTimeout(event_timeout);
 
 						if (code !== 'VALID') {

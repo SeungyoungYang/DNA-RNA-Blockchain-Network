@@ -62,10 +62,11 @@ app.use(bodyParser.urlencoded({
 ///////////////////////////////////////////////////////////////////////////////
 
 var server = http.createServer(app).listen(port, function() {
-	networkInit()
+	//networkInit();
+	logger.info('****************** SERVER STARTED ************************');
+	logger.info('***************  http://%s:%s  ******************',host,port);
 });
-logger.info('****************** SERVER STARTED ************************');
-logger.info('***************  http://%s:%s  ******************',host,port);
+
 server.timeout = 240000;
 
 function getErrorMessage(field) {
@@ -174,8 +175,6 @@ app.get('/test/:channelName/chaincodes/:chaincodeName', async function (req, res
         var channelName = req.params.channelName;
         var fcn = req.query.fcn;
         var args = req.query.args;
-        console.log('check');
-		console.log(req.query);
 		req.username = 'JGNR'
 		req.orgname = 'Org1'
 
@@ -200,7 +199,6 @@ app.get('/test/:channelName/chaincodes/:chaincodeName', async function (req, res
         args = JSON.parse(args);
 
         let message = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, req.username, req.orgname);
-       // console.log(message);
         res.send({msg:message});
 });
 
@@ -211,7 +209,6 @@ app.post('/test/:channelName/chaincodes/:chaincodeName', async function (req, re
 	var channelName = req.params.channelName;
 	var fcn = req.body.fcn;
 	var args = req.body.args;
-	console.log('check');
 	req.username = 'JGNR'
 	req.orgname = 'Org1'
 
@@ -232,11 +229,20 @@ app.post('/test/:channelName/chaincodes/:chaincodeName', async function (req, re
 		return;
 	}
 
-	args = args.replace(/'/g, '"');
-	args = JSON.parse(args);
-
-	let message = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, req.username, req.orgname);
-	//console.log(message);
+	let message
+	if(fcn == "query") {
+		args = args.replace(/'/g, '"');
+		args = JSON.parse(args);
+		console.log(fcn);
+	
+		message = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, req.username, req.orgname);
+	}
+	else {
+		args = args.replace(/'/g, '"');
+		args = JSON.parse(args);
+		console.log(args)
+		message = await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, req.username, req.orgname);
+	}
 	res.send({msg:message});
 });
 

@@ -20,6 +20,8 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"encoding/json"
+	"time"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
@@ -29,6 +31,17 @@ var logger = shim.NewLogger("example_cc0")
 
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
+}
+
+type tx struct {
+	Timestamp	string 	`json:"timestamp"`
+	TxState		string	`json:"txState"`
+	SellerID 	string 	`json:"sellerID"`
+	SellerName 	string 	`json:"sellerName"`
+	SellerPN	string 	`json:"sellerPN"`
+	BuyerID		string 	`json:"buyerID"`
+	BuyerName	string 	`json:"buyerName"`
+	BuyerPN		string	`json:"buyerPN"`
 }
 
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response  {
@@ -87,6 +100,14 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		// Deletes an entity from its state
 		return t.move(stub, args)
 	}
+	if function == "tx_state" {
+		// Update transaction state
+		return t.tx_state(stub, args)
+	}
+	// if function == "report" {
+	// 	// Report the transaction
+	// 	return t.report(stub, args)
+	// }
 
 	logger.Errorf("Unknown action, check the first argument, must be one of 'delete', 'query', or 'move'. But got: %v", args[0])
 	return shim.Error(fmt.Sprintf("Unknown action, check the first argument, must be one of 'delete', 'query', or 'move'. But got: %v", args[0]))
@@ -169,32 +190,80 @@ func (t *SimpleChaincode) delete(stub shim.ChaincodeStubInterface, args []string
 // Query callback representing the query of a chaincode
 func (t *SimpleChaincode) query(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	var A string // Entities
+	var txID string
 	var err error
 
 	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting ID of the transaction to query")
+	}
+
+	txID = args[0]
+
+	// Get the state from the ledger
+	valAsbytes, err := stub.GetState(txID)
+	if err != nil {
+		jsonResp := "{\"Error\":\"Failed to get state for " + txID + "\"}"
+		return shim.Error(jsonResp)
+	}
+
+	if valAsbytes == nil {
+		jsonResp := "{\"Error\":\"Transaction does not exist " + txID + "\"}"
+		return shim.Error(jsonResp)
+	}
+
+	// jsonResp := "{\"Transaction ID\":\"" + txID + "\",\"Amount\":\"" + string(Avalbytes) + "\"}"
+	// logger.Infof("Query Response:%s\n", jsonResp)
+	return shim.Success(valAsbytes)
+}
+
+// Update transaction state
+func (t *SimpleChaincode) tx_state(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	
+	var err error
+
+	//	  0	      1        2		  3 		 4        5         6	      7
+	//	txID  txState  sellerID  sellerName  sellerPN  buyerID  buyerName  buyerPN
+	if len(args) != 8 {
 		return shim.Error("Incorrect number of arguments. Expecting name of the person to query")
 	}
 
-	A = args[0]
+	timestamp := time.Now().Format("1995-01-16 04:05:10")
+	txID := args[0]
+	txState := args[1]
+	sellerID := args[2]
+	sellerName := args[3]
+	sellerPN := args[4]
+	// if err != nil {
+	// 	return shim.Error("5th argument must be a numeric string")
+	// }
+	buyerID := args[5]
+	buyerName := args[6]
+	buyerPN := args[7]
+	// if err != nil {
+	// 	return shim.Error("8th argument must be a numeric string")
+	// }
 
-	// Get the state from the ledger
-	Avalbytes, err := stub.GetState(A)
+	tx := &tx{timestamp, txState, sellerID, sellerName, sellerPN, buyerID, buyerName, buyerPN}
+	txJSONasBytes, err := json.Marshal(tx)
 	if err != nil {
-		jsonResp := "{\"Error\":\"Failed to get state for " + A + "\"}"
-		return shim.Error(jsonResp)
+		return shim.Error(err.Error())
 	}
 
-	if Avalbytes == nil {
-		jsonResp := "{\"Error\":\"Nil amount for " + A + "\"}"
-		return shim.Error(jsonResp)
+	// Write the state to the ledger
+	err = stub.PutState(txID, txJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
 	}
 
-	jsonResp := "{\"Name\":\"" + A + "\",\"Amount\":\"" + string(Avalbytes) + "\"}"
-	logger.Infof("Query Response:%s\n", jsonResp)
-	return shim.Success(Avalbytes)
+	logger.Info("Transaction ID = %d, Transaction State = %s\n", txID, txState)
+
+	return shim.Success(nil)
 }
 
+// // Report  the transaction
+// func (t *SimpleChaincode) tx_state(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+// }
 func main() {
 	err := shim.Start(new(SimpleChaincode))
 	if err != nil {
