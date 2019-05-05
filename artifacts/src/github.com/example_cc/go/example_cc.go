@@ -293,7 +293,7 @@ func (t *SimpleChaincode) report(stub shim.ChaincodeStubInterface, args []string
 		return shim.Error("Incorrect number of arguments. Expecting name of the person to query")
 	}
 
-	timestamp := time.Now().Format("1995-01-16 04:05:10")
+	timestamp := time.Now().Format("2006-01-02 15:04:05")
 	reportID := args[0]
 	txID := args[1]
 	details := args[2]

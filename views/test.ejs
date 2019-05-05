@@ -1,0 +1,23 @@
+<input type="button" id="button1" onclick="button1_click();" value="tx_state"/>
+<input type="button" id="button2" onclick="button2_click();" value="history"/>
+<input type="button" id="button3" onclick="button3_click();" value="queryByUserID"/>
+<script>
+function button1_click() {
+	$.post('/test/channels/mychannel/chaincodes/mycc', { peer: 'peer0.org1.example.com', fcn: 'tx_state', args: '["1","matching","sy","승영","01050343548","jh","준현","01011112222"]' }, function (data) {
+                                                alert(data.msg);
+  })
+}
+
+function button2_click() {
+  $.post('/test/channels/mychannel/chaincodes/mycc', { peer: 'peer0.org1.example.com', fcn: 'history', args: '["1"]' }, function (data) {
+                                                alert(data.msg);
+  })
+}
+function button3_click() {
+  $.post('/test/channels/mychannel/chaincodes/mycc', { peer: 'peer0.org1.example.com', fcn: 'queryByUserID', args: '["1"]' }, function (data) {
+                                                alert(data.msg);
+  })
+}
+</script>
+
+

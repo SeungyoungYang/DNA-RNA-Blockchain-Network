@@ -425,3 +425,11 @@ app.get('/channels', async function(req, res) {
 	let message = await query.getChannels(peer, req.username, req.orgname);
 	res.send(message);
 });
+
+function getErrorMessage(field) {
+	var response = {
+		success: false,
+		message: field + ' field is missing or Invalid in the request'
+	};
+	return response;
+}

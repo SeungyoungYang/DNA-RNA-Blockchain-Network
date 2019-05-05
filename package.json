@@ -23,6 +23,7 @@
     "ejs": "^2.6.1",
     "express": "^4.15.2",
     "express-bearer-token": "^2.1.0",
+    "express-ejs-layouts": "^2.5.0",
     "express-jwt": "^5.1.0",
     "express-session": "^1.15.2",
     "fabric-ca-client": "~1.4.0",
