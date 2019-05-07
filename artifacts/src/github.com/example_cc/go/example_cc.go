@@ -36,6 +36,7 @@ type SimpleChaincode struct {
 }
 
 type tx struct {
+	ObjectType 	string 	`json:"docType"`
 	Timestamp	string 	`json:"timestamp"`
 	TxState		string	`json:"txState"`
 	SellerID 	string 	`json:"sellerID"`
@@ -47,6 +48,7 @@ type tx struct {
 }
 
 type rp struct {
+	ObjectType	string	`json:"docType"`
 	Timestamp	string 	`json:"timestamp"`
 	TxID		string	`json:"txID"`
 	Details		string	`json:"details"`
@@ -249,7 +251,7 @@ func (t *SimpleChaincode) tx_state(stub shim.ChaincodeStubInterface, args []stri
 		return shim.Error("Incorrect number of arguments. Expecting name of the person to query")
 	}
 
-	timestamp := time.Now().Format("1995-01-16 04:05:10")
+	timestamp := time.Now().Format("2006-01-02 15:04:05")
 	txID := args[0]
 	txState := args[1]
 	sellerID := args[2]
@@ -265,7 +267,8 @@ func (t *SimpleChaincode) tx_state(stub shim.ChaincodeStubInterface, args []stri
 	// 	return shim.Error("8th argument must be a numeric string")
 	// }
 
-	tx := &tx{timestamp, txState, sellerID, sellerName, sellerPN, buyerID, buyerName, buyerPN}
+	objectType := "transaction"
+	tx := &tx{objectType, timestamp, txState, sellerID, sellerName, sellerPN, buyerID, buyerName, buyerPN}
 	txJSONasBytes, err := json.Marshal(tx)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -277,7 +280,7 @@ func (t *SimpleChaincode) tx_state(stub shim.ChaincodeStubInterface, args []stri
 		return shim.Error(err.Error())
 	}
 
-	logger.Info("Transaction ID = %d, Transaction State = %s\n", txID, txState)
+	logger.Info("Transaction ID = " + txID + ", Transaction State = " + txState + "\n")
 
 	return shim.Success(nil)
 }
@@ -310,7 +313,8 @@ func (t *SimpleChaincode) report(stub shim.ChaincodeStubInterface, args []string
 	// 	return shim.Error("9th argument must be a numeric string")
 	// }
 
-	rp := &rp{timestamp, txID, details, sellerID, sellerName, sellerPN, buyerID, buyerName, buyerPN}
+	objectType := "report"
+	rp := &rp{objectType, timestamp, txID, details, sellerID, sellerName, sellerPN, buyerID, buyerName, buyerPN}
 	rpJSONasBytes, err := json.Marshal(rp)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -322,7 +326,7 @@ func (t *SimpleChaincode) report(stub shim.ChaincodeStubInterface, args []string
 		return shim.Error(err.Error())
 	}
 
-	logger.Info("Report ID = %s, Transaction ID = %s\n", reportID, txID)
+	logger.Info("Report ID = " + reportID + ", Transaction ID = " + txID + "\n")
 
 	return shim.Success(nil)
 }

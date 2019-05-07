@@ -14,7 +14,7 @@ function button2_click() {
   })
 }
 function button3_click() {
-  $.post('/test/channels/mychannel/chaincodes/mycc', { peer: 'peer0.org1.example.com', fcn: 'queryByUserID', args: '["1"]' }, function (data) {
+  $.post('/test/channels/mychannel/chaincodes/mycc', { peer: 'peer0.org1.example.com', fcn: 'queryByUserID', args: '["sy"]' }, function (data) {
                                                 alert(data.msg);
   })
 }
