@@ -84,6 +84,7 @@ module.exports = function (app) {
         else if(fcn == "tx_state") {
             message = await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
         }
+        
         res.send({msg:message});
     });    
 

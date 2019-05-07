@@ -21,8 +21,6 @@ async function networkInit(){
 	var orgname2 = 'Org2'
 	await helper.getRegisteredUser(username1, orgname1, true);
 	logger.debug('Successfully registered the username %s for organization %s',username1,orgname1);
-	await helper.getRegisteredUser(username2, orgname2, true);
-	logger.debug('Successfully registered the username %s for organization %s',username2,orgname2);
 
 	// Create Channel
 	logger.info('<<<<<<<<<<<<<<<<< C R E A T E  C H A N N E L >>>>>>>>>>>>>>>>>');
@@ -41,13 +39,6 @@ async function networkInit(){
 	logger.debug('orgname:' + orgname1);
 	await join.joinChannel(channelName, peers, username1, orgname1);
 
-	var peers = ["peer0.org2.example.com","peer1.org2.example.com"];
-	logger.debug('channelName : ' + channelName);
-	logger.debug('peers : ' + peers);
-	logger.debug('username :' + username2);
-	logger.debug('orgname:' + orgname2);
-	await join.joinChannel(channelName, peers, username2, orgname2);
-	
 	// Update anchor peers
 	logger.debug('==================== UPDATE ANCHOR PEERS ==================');
 	var configUpdatePath = "../artifacts/channel/Org1MSPanchors.tx";
@@ -55,10 +46,6 @@ async function networkInit(){
 	logger.debug('configUpdatePath : ' + configUpdatePath);
 	await updateAnchorPeers.updateAnchorPeers(channelName, configUpdatePath, username1, orgname1);
 
-	var configUpdatePath = "../artifacts/channel/Org2MSPanchors.tx";
-	logger.debug('configUpdatePath : ' + configUpdatePath);
-	await updateAnchorPeers.updateAnchorPeers(channelName, configUpdatePath, username2, orgname2);
-	
 	// Install chaincode on target peers
 	logger.debug('==================== INSTALL CHAINCODE ==================');
 	var peers = ["peer0.org1.example.com","peer1.org1.example.com"];
@@ -73,18 +60,10 @@ async function networkInit(){
 	logger.debug('chaincodeType  : ' + chaincodeType);
 	await install.installChaincode(peers, chaincodeName, chaincodePath, chaincodeVersion, chaincodeType, username1, orgname1)
 	
-	var peers = ["peer0.org2.example.com","peer1.org2.example.com"];
-	logger.debug('peers : ' + peers); // target peers list
-	logger.debug('chaincodeName : ' + chaincodeName);
-	logger.debug('chaincodePath  : ' + chaincodePath);
-	logger.debug('chaincodeVersion  : ' + chaincodeVersion);
-	logger.debug('chaincodeType  : ' + chaincodeType);
-	await install.installChaincode(peers, chaincodeName, chaincodePath, chaincodeVersion, chaincodeType, username2, orgname2)
-	
 	// Instantiate chaincode on target peers
 	logger.debug('==================== INSTANTIATE CHAINCODE ==================');
 	//var fcn = req.body.fcn;
-	var peers = ["peer0.org1.example.com","peer1.org1.example.com","peer0.org2.example.com","peer1.org2.example.com"];
+	var peers = ["peer0.org1.example.com","peer1.org1.example.com"];
 	var args = ["a","100","b","200"];
 	var fcn = 'init';
 	logger.debug('peers  : ' + peers);
@@ -97,6 +76,8 @@ async function networkInit(){
 
 	logger.debug('==================== FINISH INIT BLOCKCHAIN NETWORK ==================');
 }
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////// REST ENDPOINTS START HERE ///////////////////////////

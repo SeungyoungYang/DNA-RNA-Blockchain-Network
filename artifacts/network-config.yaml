@@ -74,18 +74,6 @@ channels:
         ledgerQuery: true
         eventSource: false
 
-      peer0.org2.example.com:
-        endorsingPeer: true
-        chaincodeQuery: true
-        ledgerQuery: true
-        eventSource: true
-
-      peer1.org2.example.com:
-        endorsingPeer: false
-        chaincodeQuery: true
-        ledgerQuery: true
-        eventSource: false
-
     # [Optional]. what chaincodes are expected to exist on this channel? The application can use
     # this information to validate that the target peers are in the expected state by comparing
     # this list with the query results of getInstalledChaincodes() and getInstantiatedChaincodes()
@@ -129,17 +117,6 @@ organizations:
   # peers with a public URL to send transaction proposals. The file will not contain private
   # information reserved for members of the organization, such as admin key and certificate,
   # fabric-ca registrar enroll ID and secret, etc.
-  Org2:
-    mspid: Org2MSP
-    peers:
-      - peer0.org2.example.com
-      - peer1.org2.example.com
-    certificateAuthorities:
-      - ca-org2
-    adminPrivateKey:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/1995b11d6573ed3be52fcd7a5fa477bc0f183e1f5f398c8281d0ce7c2c75a076_sk
-    signedCert:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/signcerts/Admin@org2.example.com-cert.pem
 
 #
 # List of orderers to send transaction and channel create/update requests to. For the time
@@ -179,21 +156,6 @@ peers:
     tlsCACerts:
       path: artifacts/channel/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt
 
-  peer0.org2.example.com:
-    url: grpcs://localhost:8051
-    grpcOptions:
-      ssl-target-name-override: peer0.org2.example.com
-    tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
-
-  peer1.org2.example.com:
-    url: grpcs://localhost:8056
-    eventUrl: grpcs://localhost:8058
-    grpcOptions:
-      ssl-target-name-override: peer1.org2.example.com
-    tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt
-
 #
 # Fabric-CA is a special kind of Certificate Authority provided by Hyperledger Fabric which allows
 # certificate management to be done via REST APIs. Application may choose to use a standard
@@ -216,15 +178,3 @@ certificateAuthorities:
         enrollSecret: adminpw
     # [Optional] The optional name of the CA.
     caName: ca-org1
-
-  ca-org2:
-    url: https://localhost:8054
-    httpOptions:
-      verify: false
-    tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.example.com/ca/ca.org2.example.com-cert.pem
-    registrar:
-      - enrollId: admin
-        enrollSecret: adminpw
-    # [Optional] The optional name of the CA.
-    caName: ca-org2
