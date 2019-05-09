@@ -10,7 +10,15 @@ module.exports = function (app) {
     var orgname = 'Org1'
     
     router.get('/', function (req, res) {
-        res.render('test');
+        res.status(200);
+        
+        res.render('test', {
+			login: req.session.login,
+			userid: req.session.userID,
+			username: req.session.username,
+			authority: req.session.authority,
+			page: 'main'
+		});
     });
     
     router.get('/channels/:channelName/chaincodes/:chaincodeName', async function (req, res) {

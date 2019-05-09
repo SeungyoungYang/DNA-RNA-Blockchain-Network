@@ -268,14 +268,14 @@ func (t *SimpleChaincode) tx_state(stub shim.ChaincodeStubInterface, args []stri
 	// }
 
 	objectType := "transaction"
-	tx := &tx{objectType, timestamp, txState, sellerID, sellerName, sellerPN, buyerID, buyerName, buyerPN}
+	tx := &rp{objectType, timestamp, txID, txState, sellerID, sellerName, sellerPN, buyerID, buyerName, buyerPN}
 	txJSONasBytes, err := json.Marshal(tx)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
 	// Write the state to the ledger
-	err = stub.PutState(txID, txJSONasBytes)
+	err = stub.PutState(txID + "_" + txState, txJSONasBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}

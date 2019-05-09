@@ -53,11 +53,36 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 
-// set routers
+// ------- Create Session -------
+var createSession = function createSession() {
+	return function (req, res, next) {
+		if (!req.session.login) {
+			req.session.login = 'logout';
+		}
+		next();
+	};
+};
+app.use(session({
+	secret: '1234DSFs@adf1234!@#$asd',
+	resave: false,
+	saveUninitialized: true,
+	cookie: { maxAge: 600000 },
+}));
+app.use(createSession());
+
+// ------- Set Routers -------
 var mainRouter = require('./routes/index.js')(app);
 var testRouter = require('./routes/test.js')(app);
+var categoriesRouter = require('./routes/categories.js')(app);
+var productRouter = require('./routes/product.js')(app);
+var cartRouter = require('./routes/cart.js')(app);
+var checkoutRouter = require('./routes/checkout.js')(app);
 app.use('/', mainRouter);
 app.use('/test', testRouter);
+app.use('/categories', categoriesRouter);
+app.use('/product', productRouter);
+app.use('/cart', cartRouter);
+app.use('/checkout', checkoutRouter);
 // set secret variable
 
 
