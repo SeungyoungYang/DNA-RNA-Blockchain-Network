@@ -1015,7 +1015,7 @@ section
 .sorting_bar
 {
 	width: 100%;
-	padding-top: 88px;
+	padding-top: 150px;
 	padding-bottom: 100px;
 }
 .results
@@ -1227,6 +1227,10 @@ section
 .product_pagination ul li:hover a
 {
 	color: #1b1b1b;
+}
+.product_details
+{
+	margin-top: 150px;
 }
 
 /*********************************

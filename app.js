@@ -73,13 +73,13 @@ app.use(createSession());
 // ------- Set Routers -------
 var mainRouter = require('./routes/index.js')(app);
 var testRouter = require('./routes/test.js')(app);
-var categoriesRouter = require('./routes/categories.js')(app);
+var itemsRouter = require('./routes/items.js')(app);
 var productRouter = require('./routes/product.js')(app);
 var cartRouter = require('./routes/cart.js')(app);
 var checkoutRouter = require('./routes/checkout.js')(app);
 app.use('/', mainRouter);
 app.use('/test', testRouter);
-app.use('/categories', categoriesRouter);
+app.use('/items', itemsRouter);
 app.use('/product', productRouter);
 app.use('/cart', cartRouter);
 app.use('/checkout', checkoutRouter);

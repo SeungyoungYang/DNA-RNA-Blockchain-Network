@@ -1,7 +1,7 @@
 module.exports = {
-    'host': 'newbabodb.cfigsonzcith.us-east-2.rds.amazonaws.com',
-    'port': 3306,
-    'user': 'newbabodb',
-    'password': '11111111',
-    'database': 'newbabodb'
+    host: 'newbabodb.cfigsonzcith.us-east-2.rds.amazonaws.com',
+    user: 'root',
+    password: 'dkgk1234',
+    database: 'newbabodb',
+    port: 3306
 }

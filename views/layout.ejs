@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Sublime</title>
+<title>DNA</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="Sublime project">
+<meta name="description" content="DNA project">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="/styles/bootstrap4/bootstrap.min.css">
 <link href="/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -28,30 +28,17 @@
 				<div class="row">
 					<div class="col">
 						<div class="header_content d-flex flex-row align-items-center justify-content-start">
-							<div class="logo"><a href="/">Sublime.</a></div>
+							<div class="logo"><a href="/">DNA.</a></div>
 							<nav class="main_nav">
 								<ul>
 									<li class="hassubs active">
 										<a href="/">Home</a>
 										<ul>
-											<li><a href="/categories">Categories</a></li>
-											<li><a href="/product">Product</a></li>
-											<li><a href="/cart">Cart</a></li>
-											<li><a href="/checkout">Check out</a></li>
+											<li><a href="/user_items">My Items</a></li>
+											<li><a href="/user_requests">My Requests</a></li>
 										</ul>
-									</li>
-									<li class="hassubs">
-										<a href="/categories">Categories</a>
-										<ul>
-											<li><a href="categories.html">Category</a></li>
-											<li><a href="categories.html">Category</a></li>
-											<li><a href="categories.html">Category</a></li>
-											<li><a href="categories.html">Category</a></li>
-											<li><a href="categories.html">Category</a></li>
-										</ul>
-									</li>
-									<li><a href="#">Accessories</a></li>
-									<li><a href="#">Offers</a></li>
+                                    </li>
+									<li><a href="/items">Items</a></li>
 								</ul>
 							</nav>
 							<div class="header_extra ml-auto">
@@ -60,9 +47,6 @@
                                     <a href="#ModalJoin" data-toggle="modal">회원가입</a>
                                 <% } else if(login == "login") { %>
                                     <a href="/user"><%- username %></a>
-                                    <div class="shopping_cart">
-                                        <a href="/cart">Cart <span>(0)</span></a>
-                                    </div>
                                     <a href="/logout">로그아웃</a>
                                 <% } %>
 								<div class="search">
@@ -135,25 +119,11 @@
 					<li class="page_menu_item has-children menu_mm">
 						<a href="/">Home<i class="fa fa-angle-down"></i></a>
 						<ul class="page_menu_selection menu_mm">
-							<li class="page_menu_item menu_mm"><a href="/categories">Categories<i class="fa fa-angle-down"></i></a></li>
-							<li class="page_menu_item menu_mm"><a href="/product">Product<i class="fa fa-angle-down"></i></a></li>
-							<li class="page_menu_item menu_mm"><a href="/cart">Cart<i class="fa fa-angle-down"></i></a></li>
-							<li class="page_menu_item menu_mm"><a href="/checkout">Checkout<i class="fa fa-angle-down"></i></a></li>
-							<li class="page_menu_item menu_mm"><a href="/contact">Contact<i class="fa fa-angle-down"></i></a></li>
+							<li class="page_menu_item menu_mm"><a href="/user_items">My Items<i class="fa fa-angle-down"></i></a></li>
+							<li class="page_menu_item menu_mm"><a href="/user_requests">My Requests<i class="fa fa-angle-down"></i></a></li>
 						</ul>
 					</li>
-					<li class="page_menu_item has-children menu_mm">
-						<a href="/categories">Categories<i class="fa fa-angle-down"></i></a>
-						<ul class="page_menu_selection menu_mm">
-							<li class="page_menu_item menu_mm"><a href="categories.html">Category<i class="fa fa-angle-down"></i></a></li>
-							<li class="page_menu_item menu_mm"><a href="categories.html">Category<i class="fa fa-angle-down"></i></a></li>
-							<li class="page_menu_item menu_mm"><a href="categories.html">Category<i class="fa fa-angle-down"></i></a></li>
-							<li class="page_menu_item menu_mm"><a href="categories.html">Category<i class="fa fa-angle-down"></i></a></li>
-						</ul>
-					</li>
-					<li class="page_menu_item menu_mm"><a href="index.html">Accessories<i class="fa fa-angle-down"></i></a></li>
-					<li class="page_menu_item menu_mm"><a href="#">Offers<i class="fa fa-angle-down"></i></a></li>
-					<li class="page_menu_item menu_mm"><a href="contact.html">Contact<i class="fa fa-angle-down"></i></a></li>
+					<li class="page_menu_item menu_mm"><a href="/items">Items<i class="fa fa-angle-down"></i></a></li>
 				</ul>
 			</div>
 		</div>
@@ -206,7 +176,7 @@
                                         if (data.msg != null) {
                                             alert(data.msg);
                                         } else {
-                                            window.location.href = "/";
+                                            window.location.reload();
                                         }
                                     })
                                 }
@@ -223,7 +193,6 @@
                                             if (data.msg != null) {
                                                 alert(data.msg);
                                             } else {
-                                                window.location.href = "/";
                                             }
                                         })
                                     }
@@ -241,7 +210,7 @@
                                             if (data.msg != null) {
                                                 alert(data.msg);
                                             } else {
-                                                window.location.href = "/";
+                                                window.location.reload();
                                             }
                                         })
                                     }
@@ -296,6 +265,13 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                                <input type="tel" class="form-control" name="new_userPN" placeholder="Phone Number (Hyphen X)"
+                                    pattern="[0-9]{11}" required="required">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
                                 <input type="text" class="form-control" name="new_userEmail" placeholder="E-mail"
                                     required="required">
@@ -325,7 +301,7 @@
 			<div class="row">
 				<div class="col">
 					<div class="footer_content d-flex flex-lg-row flex-column align-items-center justify-content-lg-start justify-content-center">
-						<div class="footer_logo"><a href="#">Sublime.</a></div>
+						<div class="footer_logo"><a href="#">DNA.</a></div>
 						<div class="copyright ml-auto mr-auto"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></div>
