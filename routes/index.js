@@ -39,7 +39,7 @@ module.exports = function (app) {
 		else {
 			Database.query(queryString, function (err, result) {
 				if (err) {
-					console.log(err);
+					//console.log(err);
 				}
 				else {
 					result.forEach(function (item) {
@@ -56,7 +56,7 @@ module.exports = function (app) {
 						var params = [req.body.newid, req.body.newpw, req.body.newuserPN, req.body.newuserEmail, 0, req.body.newusername];
 						Database.query(queryString2, params, function (err) {
 							if (err) {
-								console.log(err);
+								//console.log(err);
 							}
 							else {
 								res.send({ msg: "회원가입에 성공하셨습니다!" });
