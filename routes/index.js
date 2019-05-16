@@ -5,7 +5,7 @@ module.exports = function (app) {
 	var mysql = require('mysql');
 
 	var Database = require("../config/db");
-	var connection = mysql.createConnection(Database);
+	//var connection = mysql.createConnection(Database);
 
 	router.get('/', function (req, res) {
 		res.status(200);
@@ -34,24 +34,30 @@ module.exports = function (app) {
 	router.post('/login', function (req, res) {
 
 		res.status(200);
-		sess = req.session;
-		var sampleID = "id";
-		var samplePW = "pw";
-		var sampleName = "LJS";
-		var sampleAuth = "N";
 
-		if (sampleID == req.body.id && samplePW == req.body.pw) {
-			req.session.userID = sampleID;
-			req.session.username = sampleName;
-			req.session.authority = sampleAuth;
-			req.session.login = 'login';
+		var queryString = 'select * from Member';
+		var flag = false;
+		Database.query(queryString, function (err, result) {
+			if (err) {
+				 console.log(err);
+			 }
+			else {
+				result.forEach(function (item) {
+					if (item.id == req.body.id && item.pw == req.body.pw) {
 
-			req.session.save(() => {
-				res.redirect('/');
-			});
-		}
-		else
-			return res.send({ msg: "아이디 또는 비밀번호를 확인해주세요!" });
+						req.session.userID = item.id;
+						req.session.username = item.Member_name;
+						req.session.authority = item.admin;
+						req.session.login = 'login';
+						flag = true;
+						req.session.save(() => {
+							res.redirect('/');
+						});
+					}
+				})
+				if (!flag) return res.send({ msg: "아이디 또는 비밀번호를 확인해주세요!" });
+			}
+		})
 	});
 
 	router.get('/logout', function (req, res) {
