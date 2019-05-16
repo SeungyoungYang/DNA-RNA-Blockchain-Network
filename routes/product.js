@@ -5,13 +5,6 @@ module.exports = function (app) {
 	var mysql = require('mysql');
 
 	var Database = require("../config/db");
-	var connection = mysql.createConnection({
-		host: Database.host,
-		port: Database.port,
-		user: Database.user,
-		password: Database.password,
-		database: Database.database
-	});
 
 	router.get('/', function (req, res) {
 		res.status(200);

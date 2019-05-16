@@ -19,15 +19,11 @@ module.exports = function (app) {
 	
 	router.get('/', function (req, res) {
 		res.status(200);
-		mysqlDB.query('SELECT * FROM newbabodb.Product;',async function(err, rows, fields ){
-			if(!err){
-				console.log(rows);
-				//console.log(fields);
-			} else{
+		mysqlDB.query('SELECT * FROM newbabodb.Product;', function(err, rows, fields ){
+			if(err){
 				console.log('query error :'+err);
-				//res.send(err);
 			}
-			await res.render('items', {
+			res.render('items', {
 				login: req.session.login,
 				userid: req.session.userID,
 				username: req.session.username,
@@ -51,18 +47,27 @@ module.exports = function (app) {
 		});
 	});
 
-	router.post('/registration', upload.single('img1'), function (req, res) {
-		res.status(200);
-
-		res.render('items_registration', {
-			login: req.session.login,
-			userid: req.session.userID,
-			username: req.session.username,
-			authority: req.session.authority,
-			page: 'categories'
-		});
-
-		timeStamp = Date.now();
+	var readDB = function(query){
+		return new Promise(function(resolve, reject){
+			mysqlDB.query(query,  function(err, rows, fields ){
+				var pd_id= rows.length+1;
+				resolve(pd_id);
+			});
+		})
+	}
+	router.post('/registration', upload.single('img1'),  async function (req, res) {
+		var pd_name = req.body['product_name'];
+		var pd_price = req.body['price'];
+		var pd_content = req.body['content'];
+		var seller = req.session.userID;
+		var timeStamp = Date.now();
+		var pd_img = '/product_img/'+req.file.filename;
+		var pd_id = await readDB('SELECT * FROM newbabodb.Product;');
+		console.log(req.file);
+		mysqlDB.query('insert into newbabodb.Product value(?,?,?,?,?,?,?)',[pd_id,pd_img,seller,pd_price,pd_name,pd_content,timeStamp],function(err,rows,field){
+			console.log(rows);
+		})
+		res.redirect('/items');
 	});
 
 	return router;

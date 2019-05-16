@@ -1,7 +1,7 @@
 <!-- Product Details -->
 
 <div class="product_details">
-    <form action="/product/registration" method="post" enctype="multipart/form-data">
+    <form action="/items/registration" method="post" enctype="multipart/form-data">
         <div class="container" style="margin: 3% auto 5% auto">
             <h2>&nbsp;&nbsp;상품 등록하기</h2>
             <table class="table table-hover">
@@ -30,7 +30,7 @@
             <div class="fileRegiBtn">
                 <input type="file" id="myFileUp1" name="img1" onclick="fileUploadAction1();">
             </div>
-            <input type="button" class="btn btn-primary pull-right" style="margin-left: 10px" value="취소" onclick="location.href='/categories'">
+            <input type="button" class="btn btn-primary pull-right" style="margin-left: 10px" value="취소" onclick="location.href='/items'">
             <input type="submit" class="btn btn-primary pull-right" value="등록">
             <script>
                 $(document).ready(function() {
