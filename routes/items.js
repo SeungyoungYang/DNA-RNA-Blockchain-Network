@@ -5,6 +5,7 @@ module.exports = function (app) {
 	var mysql = require('mysql');
 	var multer = require('multer')
 	var timeStamp = Date.now();
+	var mysqlDB = require('../config/db');
 	var _storage = multer.diskStorage({
 		destination: function (req, file, cb) {
 			cb(null, 'public/product_img/')
@@ -15,25 +16,27 @@ module.exports = function (app) {
 	});
     var upload = multer({ storage: _storage });
 
-	var Database = require("../config/db");
-	var connection = mysql.createConnection({
-		host: Database.host,
-		port: Database.port,
-		user: Database.user,
-		password: Database.password,
-		database: Database.database
-	});
-
+	
 	router.get('/', function (req, res) {
 		res.status(200);
-
-		res.render('items', {
-			login: req.session.login,
-			userid: req.session.userID,
-			username: req.session.username,
-			authority: req.session.authority,
-			page: 'categories'
-		});
+		mysqlDB.query('SELECT * FROM newbabodb.Product;',async function(err, rows, fields ){
+			if(!err){
+				console.log(rows);
+				//console.log(fields);
+			} else{
+				console.log('query error :'+err);
+				//res.send(err);
+			}
+			await res.render('items', {
+				login: req.session.login,
+				userid: req.session.userID,
+				username: req.session.username,
+				authority: req.session.authority,
+				page: 'categories',
+				items: rows
+			});
+		})
+		
 	});
 
 	router.get('/registration', function (req, res) {

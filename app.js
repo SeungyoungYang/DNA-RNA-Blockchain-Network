@@ -32,6 +32,9 @@ var cors = require('cors');
 require('./config.js');
 var hfc = require('fabric-client');
 
+var mysqlDB = require('./config/db');
+mysqlDB.connect();
+
 var helper = require('./blockchain/helper.js');
 var invoke = require('./blockchain/invoke-transaction.js');
 var query = require('./blockchain/query.js');
