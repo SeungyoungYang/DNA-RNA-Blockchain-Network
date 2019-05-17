@@ -1,24 +1,3 @@
-<div class="home">
-	<div class="home_container">
-		<div class="home_background" style="background-image:url(/images/categories.jpg)"></div>
-		<div class="home_content_container">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						<div class="home_content">
-							<div class="home_title">Smart Phones<span>.</span></div>
-							<div class="home_text">
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam a ultricies metus.
-									Sed nec molestie eros. Sed viverra velit venenatis fermentum luctus.</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
 <!-- Product Details -->
 
 <div class="product_details">
@@ -28,10 +7,10 @@
 			<!-- Product Image -->
 			<div class="col-lg-6">
 				<div class="details_image">
-					<div class="details_image_large"><img src="/images/details_1.jpg" alt=""></div>
+					<div class="details_image_large"><img src=<%- items[0].img_path%> alt=""></div>
 					<div class="details_image_thumbnails d-flex flex-row align-items-start justify-content-between">
-						<div class="details_image_thumbnail active" data-image="/images/details_1.jpg"><img
-								src="/images/details_1.jpg" alt=""></div>
+						<div class="details_image_thumbnail active" data-image=<%- items[0].img_path%>><img
+								src=<%- items[0].img_path%> alt=""></div>
 						<div class="details_image_thumbnail" data-image="/images/details_2.jpg"><img
 								src="/images/details_2.jpg" alt=""></div>
 						<div class="details_image_thumbnail" data-image="/images/details_3.jpg"><img
@@ -45,8 +24,8 @@
 			<!-- Product Content -->
 			<div class="col-lg-6">
 				<div class="details_content">
-					<div class="details_name"><%- product_name %></div>
-					<div class="details_price"><%- product_price %></div>
+					<div class="details_name"><%- items[0].Product_name %></div>
+					<div class="details_price"><%- items[0].Product_price %> 원</div>
 
 					<!-- In Stock -->
 					<div class="in_stock_container">
@@ -58,10 +37,7 @@
 						<% } %>
 					</div>
 					<div class="details_text">
-						<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-							invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Phasellus id nisi quis
-							justo tempus mollis sed et dui. In hac habitasse platea dictumst. Suspendisse ultrices
-							mauris diam. Nullam sed aliquet elit. Mauris consequat nisi ut mauris efficitur lacinia.</p>
+						<p><%- items[0].Product_content%></p>
 					</div>
 
 					<!-- Product Quantity -->

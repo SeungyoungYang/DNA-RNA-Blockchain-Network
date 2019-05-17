@@ -1132,7 +1132,8 @@ section
 }
 .product_image img
 {
-	max-width: 100%;
+	width: 210px;
+	height: 210px;
 }
 .product_content
 {

@@ -2,7 +2,6 @@ module.exports = function (app) {
 
 	var express = require('express');
 	var router = express.Router();
-	var mysql = require('mysql');
 	var multer = require('multer')
 	var timeStamp = Date.now();
 	var mysqlDB = require('../config/db');
