@@ -439,9 +439,23 @@ section
 {
 	color: #1b1b1b;
 }
-.header_extra
+.header_extra a
 {
-
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 13px;
+	font-weight: 600;
+	color: #1b1b1b;
+	padding-right: 5px;
+	padding-left: 5px;
+	padding-top: 25px;
+	padding-bottom: 25px;
+	
+	-webkit-transition: all 200ms ease;
+	-moz-transition: all 200ms ease;
+	-ms-transition: all 200ms ease;
+	-o-transition: all 200ms ease;
+	transition: all 200ms ease;
 }
 .shopping_cart
 {
