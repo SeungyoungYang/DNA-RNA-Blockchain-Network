@@ -29,14 +29,18 @@
 					<div class="details_price"><%- items[0].Product_price %> 원</div>
 
 					<!-- In Stock -->
-					<div class="in_stock_container">
-						<div class="availability">진행 상황:</div>
-						<% if(items[0].status == 0) { %>
+					<% if(items[0].status == 0) { %>
+						<div class="in_stock_container">
+							<div class="availability">진행 상황:</div>
 							<span>구매 신청 가능</span>
-						<% } else { %>
-							<span>구매 진행중</span>
-						<% } %>
-					</div>
+						</div>	
+					<% } else { %>	
+						<div class="in_stock_container2">
+								<div class="availability">진행 상황:</div>
+								<span>구매 진행중</span>
+						</div>	
+					<% } %>
+					
 					<div class="details_text">
 						<p><%- items[0].Product_content%></p>
 					</div>
