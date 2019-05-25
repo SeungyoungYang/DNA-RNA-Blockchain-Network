@@ -53,7 +53,14 @@
 										class="fa fa-chevron-down" aria-hidden="true"></i></div>
 							</div>
 						</div>
-						<div class="button cart_button"><a href="#">구매 요청</a></div>
+						<div class="button cart_button"><a onclick="buyrequest()">구매 요청</a></div>
+						<script>
+							function buyrequest(){
+								//if(userid==items[0].)
+								location.href = "/request?pid=<%- items[0].Product_id%>";
+								alert("구매요청이 완료되었습니다.");
+							}	
+						</script>
 						<div class="button cart_button"><a href="#">판매자 정보 보기</a></div>
 					</div>
 

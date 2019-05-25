@@ -80,6 +80,7 @@ var itemsRouter = require('./routes/items.js')(app);
 var productRouter = require('./routes/product.js')(app);
 var cartRouter = require('./routes/cart.js')(app);
 var checkoutRouter = require('./routes/checkout.js')(app);
+var requestRouter = require('./routes/buyrequest.js')(app);
 
 app.use('/', mainRouter);
 app.use('/test', testRouter);
@@ -87,6 +88,7 @@ app.use('/items', itemsRouter);
 app.use('/product', productRouter);
 app.use('/cart', cartRouter);
 app.use('/checkout', checkoutRouter);
+app.use('/request', requestRouter);
 // set secret variable
 
 

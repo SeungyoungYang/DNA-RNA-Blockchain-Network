@@ -20,9 +20,12 @@ module.exports = function (app) {
 				page: 'product',
 				items: rows,
 				availability: 'yes',
+				//buyrequest: buyrequest()
 			});
 		})
 	});
+
+
 
 	return router;
 }
