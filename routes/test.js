@@ -6,6 +6,9 @@ module.exports = function (app) {
     var invoke = require('../blockchain/invoke-transaction.js');
     var query = require('../blockchain/query.js');
     
+    var peer = 'peer0.org1.example.com'
+    var channelName = 'mychannel'
+    var chaincodeName = 'mycc'
     var username = 'JGNR'
     var orgname = 'Org1'
     
@@ -18,6 +21,28 @@ module.exports = function (app) {
 			username: req.session.username,
 			authority: req.session.authority,
 			page: 'main'
+		});
+    });
+
+    router.get('/history/:args', async function (req, res) {
+        res.status(200);
+        
+        var args = [req.params.args];
+        var fcn = 'queryByUserID';
+        var _result = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, username, orgname);
+        var _results = _result.split('&&');
+        var _results_json = new Array();
+        for(var i=0; i < _results.length; i++){
+            _results_json.push(JSON.parse(_results[i]));
+        }
+        
+        res.render('history', {
+			login: req.session.login,
+			userid: req.session.userID,
+			username: req.session.username,
+			authority: req.session.authority,
+            page: 'null',
+            result: _results_json
 		});
     });
     
@@ -83,7 +108,7 @@ module.exports = function (app) {
         if(fcn == "query") {	
             message = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, username, orgname);
         }
-        else if(fcn == "queryByUserID") {	
+        else if(fcn == "queryByUserID") {
             message = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, username, orgname);
         }
         else if(fcn == "history") {

@@ -35,29 +35,17 @@ var logger = shim.NewLogger("example_cc0")
 type SimpleChaincode struct {
 }
 
-type tx struct {
-	ObjectType 	string 	`json:"docType"`
-	Timestamp	string 	`json:"timestamp"`
-	TxState		string	`json:"txState"`
-	SellerID 	string 	`json:"sellerID"`
-	SellerName 	string 	`json:"sellerName"`
-	SellerPN	string 	`json:"sellerPN"`
-	BuyerID		string 	`json:"buyerID"`
-	BuyerName	string 	`json:"buyerName"`
-	BuyerPN		string	`json:"buyerPN"`
-}
-
-type rp struct {
+type doc struct {
 	ObjectType	string	`json:"docType"`
 	Timestamp	string 	`json:"timestamp"`
 	TxID		string	`json:"txID"`
 	Details		string	`json:"details"`
 	SellerID 	string 	`json:"sellerID"`
 	SellerName 	string 	`json:"sellerName"`
-	SellerPN	string 	`json:"sellerPN"`
+	SellerRRN	string 	`json:"sellerRRN"`
 	BuyerID		string 	`json:"buyerID"`
 	BuyerName	string 	`json:"buyerName"`
-	BuyerPN		string	`json:"buyerPN"`
+	BuyerRRN	string	`json:"buyerRNN"`
 }
 
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response  {
@@ -256,19 +244,19 @@ func (t *SimpleChaincode) tx_state(stub shim.ChaincodeStubInterface, args []stri
 	txState := args[1]
 	sellerID := args[2]
 	sellerName := args[3]
-	sellerPN := args[4]
+	sellerRNN := args[4]
 	// if err != nil {
 	// 	return shim.Error("5th argument must be a numeric string")
 	// }
 	buyerID := args[5]
 	buyerName := args[6]
-	buyerPN := args[7]
+	buyerRNN := args[7]
 	// if err != nil {
 	// 	return shim.Error("8th argument must be a numeric string")
 	// }
 
 	objectType := "transaction"
-	tx := &rp{objectType, timestamp, txID, txState, sellerID, sellerName, sellerPN, buyerID, buyerName, buyerPN}
+	tx := &doc{objectType, timestamp, txID, txState, sellerID, sellerName, sellerRNN, buyerID, buyerName, buyerRNN}
 	txJSONasBytes, err := json.Marshal(tx)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -302,19 +290,19 @@ func (t *SimpleChaincode) report(stub shim.ChaincodeStubInterface, args []string
 	details := args[2]
 	sellerID := args[3]
 	sellerName := args[4]
-	sellerPN := args[5]
+	sellerRNN := args[5]
 	// if err != nil {
 	// 	return shim.Error("6th argument must be a numeric string")
 	// }
 	buyerID := args[6]
 	buyerName := args[7]
-	buyerPN := args[8]
+	buyerRNN := args[8]
 	// if err != nil {
 	// 	return shim.Error("9th argument must be a numeric string")
 	// }
 
 	objectType := "report"
-	rp := &rp{objectType, timestamp, txID, details, sellerID, sellerName, sellerPN, buyerID, buyerName, buyerPN}
+	rp := &doc{objectType, timestamp, txID, details, sellerID, sellerName, sellerRNN, buyerID, buyerName, buyerRNN}
 	rpJSONasBytes, err := json.Marshal(rp)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -448,7 +436,6 @@ func getQueryResultForQueryString(stub shim.ChaincodeStubInterface, queryString 
 func constructQueryResponseFromIterator(resultsIterator shim.StateQueryIteratorInterface) (*bytes.Buffer, error) {
 	// buffer is a JSON array containing QueryResults
 	var buffer bytes.Buffer
-	buffer.WriteString("[")
 
 	bArrayMemberAlreadyWritten := false
 	for resultsIterator.HasNext() {
@@ -458,20 +445,12 @@ func constructQueryResponseFromIterator(resultsIterator shim.StateQueryIteratorI
 		}
 		// Add a comma before array members, suppress it for the first array member
 		if bArrayMemberAlreadyWritten == true {
-			buffer.WriteString(",")
+			buffer.WriteString("&&")
 		}
-		buffer.WriteString("{\"Key\":")
-		buffer.WriteString("\"")
-		buffer.WriteString(queryResponse.Key)
-		buffer.WriteString("\"")
-
-		buffer.WriteString(", \"Record\":")
 		// Record is a JSON object, so we write as-is
 		buffer.WriteString(string(queryResponse.Value))
-		buffer.WriteString("}")
 		bArrayMemberAlreadyWritten = true
 	}
-	buffer.WriteString("]")
 
 	return &buffer, nil
 }
