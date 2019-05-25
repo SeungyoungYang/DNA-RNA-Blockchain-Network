@@ -46,6 +46,8 @@ type doc struct {
 	BuyerID		string 	`json:"buyerID"`
 	BuyerName	string 	`json:"buyerName"`
 	BuyerRRN	string	`json:"buyerRNN"`
+	Product		string  `json: "product"`
+	Price 		string  `json: "price"`
 }
 
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response  {
@@ -116,9 +118,9 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		// Report the transaction
 		return t.history(stub, args)
 	}
-	if function == "queryByUserID" {
+	if function == "queryBySeller" {
 		// queries an entity state
-		return t.queryByUserID(stub, args)
+		return t.queryBySeller(stub, args)
 	}
 
 	logger.Errorf("Unknown action, check the first argument, must be one of 'delete', 'query', or 'move'. But got: %v", args[0])
@@ -233,8 +235,8 @@ func (t *SimpleChaincode) tx_state(stub shim.ChaincodeStubInterface, args []stri
 	
 	var err error
 
-	//	  0	      1        2		  3 		 4        5         6	      7
-	//	txID  txState  sellerID  sellerName  sellerPN  buyerID  buyerName  buyerPN
+	//	  0	      1        2		  3 		 4        5         6	      7		   8	   9
+	//	txID  txState  sellerID  sellerName  sellerPN  buyerID  buyerName  buyerPN  product  price
 	if len(args) != 8 {
 		return shim.Error("Incorrect number of arguments. Expecting name of the person to query")
 	}
@@ -254,9 +256,11 @@ func (t *SimpleChaincode) tx_state(stub shim.ChaincodeStubInterface, args []stri
 	// if err != nil {
 	// 	return shim.Error("8th argument must be a numeric string")
 	// }
+	product := args[8]
+	price := args[9]
 
 	objectType := "transaction"
-	tx := &doc{objectType, timestamp, txID, txState, sellerID, sellerName, sellerRNN, buyerID, buyerName, buyerRNN}
+	tx := &doc{objectType, timestamp, txID, txState, sellerID, sellerName, sellerRNN, buyerID, buyerName, buyerRNN, product, price}
 	txJSONasBytes, err := json.Marshal(tx)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -278,43 +282,44 @@ func (t *SimpleChaincode) report(stub shim.ChaincodeStubInterface, args []string
 
 	var err error
 
-	//	   0	    1      2		 3 	       4           5        6	      7         8
-	//	reportID  txID  details  sellerID  sellerName  sellerPN  buyerID  buyerName  buyerPN
+	//	  0	     1   	   2		 3 	   	     4        5         6	      7        8	   9
+	//	txID  details  sellerID  sellerName  sellerPN  buyerID  buyerName  buyerPN  product  price
 	if len(args) != 9 {
 		return shim.Error("Incorrect number of arguments. Expecting name of the person to query")
 	}
 
 	timestamp := time.Now().Format("2006-01-02 15:04:05")
-	reportID := args[0]
-	txID := args[1]
-	details := args[2]
-	sellerID := args[3]
-	sellerName := args[4]
-	sellerRNN := args[5]
+	txID := args[0]
+	details := args[1]
+	sellerID := args[2]
+	sellerName := args[3]
+	sellerRNN := args[4]
 	// if err != nil {
 	// 	return shim.Error("6th argument must be a numeric string")
 	// }
-	buyerID := args[6]
-	buyerName := args[7]
-	buyerRNN := args[8]
+	buyerID := args[5]
+	buyerName := args[6]
+	buyerRNN := args[7]
 	// if err != nil {
 	// 	return shim.Error("9th argument must be a numeric string")
 	// }
+	product := args[8]
+	price := args[9]
 
 	objectType := "report"
-	rp := &doc{objectType, timestamp, txID, details, sellerID, sellerName, sellerRNN, buyerID, buyerName, buyerRNN}
+	rp := &doc{objectType, timestamp, txID, details, sellerID, sellerName, sellerRNN, buyerID, buyerName, buyerRNN, product, price}
 	rpJSONasBytes, err := json.Marshal(rp)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
 	// Write the state to the ledger
-	err = stub.PutState(reportID, rpJSONasBytes)
+	err = stub.PutState(txID + "_report", rpJSONasBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
-	logger.Info("Report ID = " + reportID + ", Transaction ID = " + txID + "\n")
+	logger.Info("Report Successful! , Transaction ID = " + txID + "\n")
 
 	return shim.Success(nil)
 }
@@ -386,17 +391,17 @@ func (t *SimpleChaincode) history(stub shim.ChaincodeStubInterface, args []strin
 	return shim.Success(buffer.Bytes())
 }
 
-func (t *SimpleChaincode) queryByUserID(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SimpleChaincode) queryBySeller(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	//           0
-	//	sellerID or buyerID
+	//		0
+	//	buyerRRN
 	if len(args) < 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
 
-	userID := strings.ToLower(args[0])
+	buyerRRN := args[0]
 
-	queryString := fmt.Sprintf("{\"selector\":{\"sellerID\":\"%s\"}}", userID)
+	queryString := fmt.Sprintf("{\"selector\":{\"buyerRRN\":\"%s\"}}", buyerRRN)
 
 	queryResults, err := getQueryResultForQueryString(stub, queryString)
 	if err != nil {
