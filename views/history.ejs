@@ -77,15 +77,27 @@
                         <td class="r_name">상태</td>
                         <td class="r_name">상세정보</td>
                     </tr>
+                    <% result.forEach(function (history, index) { %>
                     <tr>
-                        <td><%- result[0].timestamp %></td>
-                        <td><%- result[0].sellerID %></td>
-                        <td><%- result[0].buyerID %></td>
-                        <td><%- result[0] %></td>
-                        <td><%- result[0] %></td>
-                        <td><%- result[0].docType %></td>
-                        <td><%- result[0].details %></td>
+                        <td><%- history.timestamp %></td>
+                        <td><%- history.sellerID %></td>
+                        <td><%- history.buyerID %></td>
+                        <td><%- history %></td>
+                        <td><%- history %></td>
+                        <% if (history.docType == "transaction") { %>
+                            <% if (history.details == "match") { %>
+                                <td>MATCH</td>
+                                <td>-</td>
+                            <% } else if (history.details == "finish") { %>
+                                <td>FINISH</td>
+                                <td>-</td>
+                            <% } %>
+                        <% } else { %>
+                            <td>REPORT</td>
+                            <td><%- history.details %></td>
+                        <% } %>
                     </tr>
+                    <% }) %>
                 </tbody>
             </table>
         </div>

@@ -15,7 +15,7 @@ networkInit();
 
 async function networkInit(){
 	// Register and enroll user
-	var username1 = 'JGNR'
+	var username1 = 'DNA'
 	var orgname1 = 'Org1'
 	var username2 = 'BGJT'
 	var orgname2 = 'Org2'
