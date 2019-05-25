@@ -24,45 +24,46 @@
 
         <!-- Header -->
 
-	<header class="header">
-		<div class="header_container">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						<div class="header_content d-flex flex-row align-items-center justify-content-start">
-							<div class="logo"><a href="/">DNA.</a></div>
-							<nav class="main_nav">
-                                <ul>
-                                <% if(login == "logout") { %>
-                                    <li><a href="/">Home</a></li>
-                                <% } else if(login == "login") { %>
-									<li class="hassubs active">
-                                        <a href="/userID">My Page</a>
-                                        <ul>
-                                            <li><a href="/user_items">My Items</a></li>
-                                            <li><a href="/user_requests">My Requests</a></li>
-                                        </ul>
-                                    </li>
-                                <% } %>
-									<li><a href="/items">Items</a></li>
-								</ul>
-							</nav>
-							<div class="header_extra ml-auto">
-                                <% if(login == "logout") { %>
+        <header class="header">
+            <div class="header_container">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="header_content d-flex flex-row align-items-center justify-content-start">
+                                <div class="logo"><a href="/">DNA.</a></div>
+                                <nav class="main_nav">
+                                    <ul>
+                                        <% if(login == "logout") { %>
+                                        <li><a href="/">Home</a></li>
+                                        <% } else if(login == "login") { %>
+                                        <li class="hassubs active">
+                                            <a href="/userID">My Page</a>
+                                            <ul>
+                                                <li><a href="/user_items">My Items</a></li>
+                                                <li><a href="/user_requests">My Requests</a></li>
+                                            </ul>
+                                        </li>
+                                        <% } %>
+                                        <li><a href="/items">Items</a></li>
+                                    </ul>
+                                </nav>
+                                <div class="header_extra ml-auto">
+                                    <% if(login == "logout") { %>
                                     <a href="#ModalLogin" data-toggle="modal">로그인</a>
                                     <a href="#ModalJoin" data-toggle="modal">회원가입</a>
                                     <% } else if(login == "login") { %>
                                     <a href="/user"><%- username %></a>
                                     <a href="/logout">로그아웃</a>
 
-                                <% } %>
-								<div class="search">
-									<div class="search_icon">
-										<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-										viewBox="0 0 475.084 475.084" style="enable-background:new 0 0 475.084 475.084;"
-										 xml:space="preserve">
-										<g>
-											<path d="M464.524,412.846l-97.929-97.925c23.6-34.068,35.406-72.047,35.406-113.917c0-27.218-5.284-53.249-15.852-78.087
+                                    <% } %>
+                                    <div class="search">
+                                        <div class="search_icon">
+                                            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                                                xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                viewBox="0 0 475.084 475.084"
+                                                style="enable-background:new 0 0 475.084 475.084;" xml:space="preserve">
+                                                <g>
+                                                    <path d="M464.524,412.846l-97.929-97.925c23.6-34.068,35.406-72.047,35.406-113.917c0-27.218-5.284-53.249-15.852-78.087
 												c-10.561-24.842-24.838-46.254-42.825-64.241c-17.987-17.987-39.396-32.264-64.233-42.826
 												C254.246,5.285,228.217,0.003,200.999,0.003c-27.216,0-53.247,5.282-78.085,15.847C98.072,26.412,76.66,40.689,58.673,58.676
 												c-17.989,17.987-32.264,39.403-42.827,64.241C5.282,147.758,0,173.786,0,201.004c0,27.216,5.282,53.238,15.846,78.083
@@ -277,6 +278,13 @@
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                    <input type="password" class="form-control" name="new_userRRN"
+                                        placeholder="주민등록번호 (Hyphen X)" pattern="[0-9]{13}" required="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-phone"></i></span>
                                     <input type="tel" class="form-control" name="new_userPN"
                                         placeholder="Phone Number (Hyphen X)" pattern="[0-9]{11}" required="required">
@@ -299,6 +307,7 @@
                                     var new_userPW = $("input[name=new_userPW]").val();
                                     var new_userPW_confirm = $("input[name=new_userPW_confirm]").val();
                                     var new_userName = $("input[name=new_userName]").val();
+                                    var new_userRRN = $("input[name=new_userRRN]").val();
                                     var new_userPN = $("input[name=new_userPN]").val();
                                     var new_userEmail = $("input[name=new_userEmail]").val();
 
@@ -310,13 +319,14 @@
                                             newpw: new_userPW,
                                             newpw_c: new_userPW_confirm,
                                             newusername: new_userName,
+                                            newuserRRN: new_userRRN,
                                             newuserPN: new_userPN,
                                             newuserEmail: new_userEmail
                                         }, function (data) {
                                             if (data.msg != null) {
                                                 alert(data.msg);
-                                                if(data.msg == "회원가입에 성공하셨습니다!")
-                                                window.location.reload();
+                                                if (data.msg == "회원가입에 성공하셨습니다!")
+                                                    window.location.reload();
                                             }
                                             else {
                                                 alert("메롱");
