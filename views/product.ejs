@@ -19,16 +19,6 @@
 					<div class="details_price"><%- items[0].Product_price %> 원</div>
 
 					<!-- In Stock -->
-<<<<<<< HEAD
-					<div class="in_stock_container">
-						<div class="availability">Availability:</div>
-						<% if(availability == "yes") { %>
-							<span>In Stock</span>
-						<% } else { %>
-							<span>Sold Out</span>
-						<% } %>
-					</div>
-=======
 					<% if(items[0].status == 0) { %>
 						<div class="in_stock_container">
 							<div class="availability">진행 상황:</div>
@@ -41,7 +31,6 @@
 						</div>	
 					<% } %>
 					
->>>>>>> 0361ff5afcfb1163c542d1779e7506614bd620dc
 					<div class="details_text">
 						<p><%- items[0].Product_content%></p>
 					</div>
