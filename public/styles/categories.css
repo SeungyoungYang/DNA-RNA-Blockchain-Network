@@ -1165,6 +1165,22 @@ section
 	line-height: 0.75;
 	margin-top: 13px;
 }
+.product_status
+{
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 500;
+	color: #44a038;
+	margin-left: 5px;
+}
+.product_status2
+{
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 500;
+	color: #fcb022;
+	margin-left: 5px;
+}
 .product_extra
 {
 	position: absolute;

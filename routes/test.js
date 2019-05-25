@@ -28,12 +28,17 @@ module.exports = function (app) {
         res.status(200);
         
         var args = [req.params.args];
-        var fcn = 'queryByUserID';
+        var fcn = 'queryBySeller';
         var _result = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, username, orgname);
-        var _results = _result.split('&&');
+        console.log(_result);
+
         var _results_json = new Array();
-        for(var i=0; i < _results.length; i++){
-            _results_json.push(JSON.parse(_results[i]));
+        if(_result == ''){ }
+        else {
+            var _results = _result.split('&&');
+            for (var i = 0; i < _results.length; i++) {
+                _results_json.push(JSON.parse(_results[i]));
+            }
         }
         
         res.render('history', {
