@@ -16,7 +16,8 @@ module.exports = function (app) {
 	router.get('/', async function (req, res) {
 		console.log(req.query.pid);
         var query = 'SELECT * FROM newbabodb.Product WHERE Product_id = '+ req.query.pid+';';
-        var query2 = 'insert into newbabodb.Order value(?,?,?,?)'
+        var query2 = 'insert into newbabodb.Order value(?,?,?,?,?,?)' 
+        var query3 = 'UPDATE newbabodb.Product SET status=1 WHERE Product_id = '+req.query.pid+';';
         var order_id = await readDB('SELECT * FROM newbabodb.Order;');
         var buyer_id = req.session.userID;
         console.log(buyer_id);
@@ -34,14 +35,22 @@ module.exports = function (app) {
 				availability: 'yes',
             });
         })
-        mysqlDB.query(query2,[order_id, req.session.userID, req.query.pid, 0],function(err,rows,fields){
+        mysqlDB.query(query2,[0, req.session.userID, req.query.pid, 1, 0,order_id],function(err,rows,fields){
             if(err){
 				console.log('query error :'+err);
 			}else{
                 console.log(rows);
+                mysqlDB.query(query3,function(err,rows_, fields){
+                    if(err){
+                        console.log('query error :'+err);
+                    }else{
+                        console.log(rows_);
+                    }
+                })
             }
           
         })
+        
 	});
 
 

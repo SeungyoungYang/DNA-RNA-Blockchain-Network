@@ -30,11 +30,11 @@
 
 					<!-- In Stock -->
 					<div class="in_stock_container">
-						<div class="availability">Availability:</div>
-						<% if(availability == "yes") { %>
-							<span>In Stock</span>
+						<div class="availability">진행 상황:</div>
+						<% if(items[0].status == 0) { %>
+							<span>구매 신청 가능</span>
 						<% } else { %>
-							<span>Sold Out</span>
+							<span>구매 진행중</span>
 						<% } %>
 					</div>
 					<div class="details_text">
@@ -53,15 +53,25 @@
 										class="fa fa-chevron-down" aria-hidden="true"></i></div>
 							</div>
 						</div>
-						<div class="button cart_button"><a onclick="buyrequest()">구매 요청</a></div>
+						<div class="button cart_button"><a 	<% if(login != "login"){ %> onclick="alert('로그인이 필요한 서비스입니다.');return false;" <% }
+							else{ %>onclick="buyrequest()"<% } %> >구매 요청</a></div>
 						<script>
-							function buyrequest(){
-								//if(userid==items[0].)
-								location.href = "/request?pid=<%- items[0].Product_id%>";
-								alert("구매요청이 완료되었습니다.");
-							}	
+								function buyrequest(){
+									var buyerid = <%- JSON.stringify(userid) %>;
+									var sellerid = <%- JSON.stringify(items[0].Member_id) %>;
+									if(<%- items[0].status %>){
+										alert("구매가 진행중이므로 구매요청을 할 수 없습니다.");
+									}
+									else if(buyerid==sellerid){
+										alert("자신의 물품에 구매요청을 할 수 없습니다.");
+									}
+									else{
+										location.href = "/request?pid=<%- items[0].Product_id%>";
+										alert("구매요청이 완료되었습니다.");
+									}
+								}	
 						</script>
-						<div class="button cart_button"><a href="/test/history/<%- items[0].Member_id %>"" onclick="window.open(this.href, '_blank', 'width=가로사이즈px,height=세로사이즈px,toolbars=no,scrollbars=no'); return false;">판매자 정보 보기</a></div>
+						<div class="button cart_button"><a href="#">판매자 정보 보기</a></div>
 					</div>
 
 					<!-- Share -->
