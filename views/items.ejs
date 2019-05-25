@@ -40,10 +40,18 @@
 					<!-- Product -->
 					<div class="product">
 						<div class="product_image"><img src= <%- items[index].img_path %> alt=""></div>
-						<div class="product_extra product_new"><a href="categories.html">New</a></div>
 						<div class="product_content">
-							<div class="product_title"><a href="product?pid=<%- items[index].Product_id%>"><%- items[index].Product_name %></a></div>
-							<div class="product_price"><%- items[index].Product_price %>원</div>
+							<div class="product_title">
+								<a href="product?pid=<%- items[index].Product_id%>"><%- items[index].Product_name %></a>
+							</div>
+							<div class="product_price">
+								<%- items[index].Product_price %>원
+								<% if(items[index].status == 0) { %>
+									<div class="product_status"><span>구매 신청 가능</span></div>	
+								<% } else { %>
+									<div class="product_status2"><span>구매 진행중</span></div>
+								<% } %>
+							</div>
 						</div>
 					</div>
 					<% } %>
