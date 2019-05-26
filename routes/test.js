@@ -5,12 +5,13 @@ module.exports = function (app) {
 
     var invoke = require('../blockchain/invoke-transaction.js');
     var query = require('../blockchain/query.js');
+	var dna = require('../config/dna');
     
-    var peer = 'peer0.org1.example.com'
-    var channelName = 'mychannel'
-    var chaincodeName = 'mycc'
-    var username = 'JGNR'
-    var orgname = 'Org1'
+    var peer = dna.peer;
+    var channelName = dna.channelName;
+    var chaincodeName = dna.chaincodeName;
+    var username = dna.username;
+    var orgname = dna.orgname;
     
     router.get('/', function (req, res) {
         res.status(200);
@@ -27,18 +28,22 @@ module.exports = function (app) {
     router.get('/history/:args', async function (req, res) {
         res.status(200);
         
+        var _results_json = new Array();
         var args = [req.params.args];
         var fcn = 'queryBySeller';
-        var _result = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, username, orgname);
-        console.log(_result);
+        var _result;
 
-        var _results_json = new Array();
-        if(_result == ''){ }
-        else {
-            var _results = _result.split('&&');
-            for (var i = 0; i < _results.length; i++) {
-                _results_json.push(JSON.parse(_results[i]));
+        try {
+            _result = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, username, orgname);
+            if (_result == '') { }
+            else {
+                var _results = _result.split('&&');
+                for (var i = 0; i < _results.length; i++) {
+                    _results_json.push(JSON.parse(_results[i]));
+                }
             }
+        } catch (err) {
+            console.log(err);
         }
         
         res.render('history', {
