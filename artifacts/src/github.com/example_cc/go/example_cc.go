@@ -45,8 +45,8 @@ type doc struct {
 	BuyerID		string 	`json:"buyerID"`
 	BuyerName	string 	`json:"buyerName"`
 	BuyerRRN	string	`json:"buyerRNN"`
-	Product		string  `json: "product"`
-	Price 		string  `json: "price"`
+	Product		string  `json:"product"`
+	Price 		string  `json:"price"`
 }
 
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response  {
@@ -234,9 +234,9 @@ func (t *SimpleChaincode) tx_state(stub shim.ChaincodeStubInterface, args []stri
 	
 	var err error
 
-	//	  0	      1        2		  3 		 4        5         6	      7		   8	   9
-	//	txID  txState  sellerID  sellerName  sellerPN  buyerID  buyerName  buyerPN  product  price
-	if len(args) != 8 {
+	//	  0	      1        2		  3 		 4         5         6	        7		 8	     9
+	//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
+	if len(args) != 10 {
 		return shim.Error("Incorrect number of arguments. Expecting name of the person to query")
 	}
 
@@ -281,9 +281,9 @@ func (t *SimpleChaincode) report(stub shim.ChaincodeStubInterface, args []string
 
 	var err error
 
-	//	  0	     1   	   2		 3 	   	     4        5         6	      7        8	   9
-	//	txID  details  sellerID  sellerName  sellerPN  buyerID  buyerName  buyerPN  product  price
-	if len(args) != 9 {
+	//	  0	     1   	   2		 3 	   	     4        5          6	        7        8	     9
+	//	txID  details  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
+	if len(args) != 10 {
 		return shim.Error("Incorrect number of arguments. Expecting name of the person to query")
 	}
 
@@ -327,7 +327,7 @@ func (t *SimpleChaincode) history(stub shim.ChaincodeStubInterface, args []strin
 
 	//       0
 	//	txID or reportID
-	if len(args) < 1 {
+	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
 
@@ -394,13 +394,13 @@ func (t *SimpleChaincode) queryBySeller(stub shim.ChaincodeStubInterface, args [
 
 	//		0
 	//	buyerRRN
-	if len(args) < 1 {
+	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
 
 	buyerRRN := args[0]
 
-	queryString := fmt.Sprintf("{\"selector\":{\"buyerRRN\":\"%s\"}}", buyerRRN)
+	queryString := fmt.Sprintf("{\"selector\":{\"sellerRRN\":\"%s\"}}", buyerRRN)
 
 	queryResults, err := getQueryResultForQueryString(stub, queryString)
 	if err != nil {

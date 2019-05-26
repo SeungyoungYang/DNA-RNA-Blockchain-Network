@@ -6,7 +6,7 @@ module.exports = function (app) {
 
 	router.get('/', function (req, res) {
 		res.status(200);
-		console.log(req.query.pid);
+		
 		var query = 'SELECT * FROM newbabodb.Product WHERE Product_id = '+ req.query.pid+';';
 		mysqlDB.query(query, function(err, rows, fields ){
 			if(err){

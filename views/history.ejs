@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <title>DNA</title>
@@ -12,38 +12,24 @@
     <link rel="stylesheet" type="text/css" href="/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
     <link rel="stylesheet" type="text/css" href="/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
     <link rel="stylesheet" type="text/css" href="/plugins/OwlCarousel2-2.2.1/animate.css">
+    <link rel="stylesheet" type="text/css" href="/styles/product.css">
+    <link rel="stylesheet" type="text/css" href="/styles/product_responsive.css">
     <script src="/js/jquery-3.2.1.min.js"></script>
 
     <style>
         .container {
-            background: url("common_pro_con_bg.png") no-repeat scroll -2000px 0 transparent;
-            float: left;
             margin: 15px 0 25px;
             padding-top: 6px;
             width: 659px;
         }
 
-        .container .c_left {
-            border-right: 1px solid #CCCCCC;
-            font-size: 12px;
-            font-weight: bold;
-            vertical-align: top;
-            width: 100px;
-        }
-
-        .container .no_line {
-            border-top: medium none;
-        }
-
         .container .r_name {
             background: none repeat scroll 0 0 #FFFFFF;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
         }
 
         .container .wrap {
-            background: url("common_pro_con_bg.png") no-repeat scroll -3000px bottom transparent;
-            float: left;
             padding-bottom: 3px;
             width: 659px;
         }
@@ -56,15 +42,43 @@
 
         .container td {
             border-top: 1px solid #CCCCCC;
+            border-bottom: 1px solid #CCCCCC;
             color: #333333;
-            font: 11px/20px arial;
+            font: 13px/20px arial;
             padding: 5px 10px;
         }
     </style>
 </head>
 
 <body>
+    <% var select = "ALL"; %>
     <div class="container">
+        <h3 style="text-align: center; color: black">판매자 정보</h3>
+            <select id="docType" style="float: right" onchange="typeChange(this)">
+                <option value="ALL">전체</option>
+                <option value="TRANSACTION">거래이력</option>
+                <option value="REPORT">신고이력</option>
+                </select><br><br>
+            <script>
+                function typeChange(e) {
+                    var target = document.getElementById("docType");
+
+                    if(target.options[target.selectedIndex].value == "ALL") {
+                        <% select = "ALL"; %>
+                        console.log('<%-select%>');
+                    }
+                    else if(target.options[target.selectedIndex].value == "TRANSACTION") {
+                        <% select = "TRANSACTION"; %>
+                        console.log('<%-select%>');
+                    }
+                    else if(target.options[target.selectedIndex].value == "REPORT") {
+                        <% select = "REPORT"; %>
+                        console.log('<%-select%>');
+                    }
+                console.log('<%-select%>');
+                    
+                }
+            </script>
         <div class="wrap">
             <table cellspacing="0" cellpadding="0" border="0" width="659">
                 <tbody>
@@ -82,17 +96,20 @@
                         <td><%- history.timestamp %></td>
                         <td><%- history.sellerID %></td>
                         <td><%- history.buyerID %></td>
-                        <td><%- history %></td>
-                        <td><%- history %></td>
-                        <% if (history.docType == "transaction") { %>
+                        <td><%- history.product %></td>
+                        <td><%- history.price %></td>
+                        <% if (select != "REPORT" && history.docType == "transaction") { %>
                             <% if (history.details == "match") { %>
                                 <td>MATCH</td>
+                                <td>-</td>
+                            <% } else if (history.details == "cancel") { %>
+                                <td>CANCEL</td>
                                 <td>-</td>
                             <% } else if (history.details == "finish") { %>
                                 <td>FINISH</td>
                                 <td>-</td>
                             <% } %>
-                        <% } else { %>
+                        <% } else if (select != "TRANSACTION" && history.docType == "report") { %>
                             <td>REPORT</td>
                             <td><%- history.details %></td>
                         <% } %>

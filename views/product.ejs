@@ -37,15 +37,22 @@
 
 					<!-- Product Quantity -->
 					<div class="product_quantity_container">
-						<div class="button cart_button"><a href="#" onclick="buyrequest()" >구매 요청</a></div>
+						<% if(items[0].status == 0) { %>
+							<div class="button cart_button"><a href="#" onclick="buyrequest()" >구매 요청</a></div>
+						<% } else { %>
+							<div class="button cart_button"><a href="#" onclick="buyrequest()" >구매 요청</a></div>
+						<% } %>
 						<script>
 							function buyrequest(){
 								//if(userid==items[0].)
 								location.href = "/request?pid=<%- items[0].Product_id%>";
+								window.location.reload();
 								alert("구매요청이 완료되었습니다.");
 							}	
 						</script>
-						<div class="button cart_button"><a href="/test/history/<%- items[0].Member_id %>"" onclick="window.open(this.href, '_blank', 'width=가로사이즈px,height=세로사이즈px,toolbars=no,scrollbars=no'); return false;">판매자 정보 보기</a></div>
+						<div class="button cart_button">
+							<a href="/test/history/<%- items[0].Member_id %>"" onclick="window.open(this.href, '_blank', 'width=800, height=700, toolbars=no'); return false;">판매자 정보 보기</a>
+						</div>
 					</div>
 
 					<!-- Share -->

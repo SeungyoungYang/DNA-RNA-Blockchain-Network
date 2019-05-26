@@ -4,6 +4,16 @@ module.exports = function (app) {
 	var router = express.Router();
 	var mysqlDB = require('../config/db');
 
+    var invoke = require('../blockchain/invoke-transaction.js');
+    var query = require('../blockchain/query.js');
+	var dna = require('../config/dna');
+    
+    var peer = dna.peer;
+    var channelName = dna.channelName;
+    var chaincodeName = dna.chaincodeName;
+    var username = dna.username;
+    var orgname = dna.orgname;
+    
     var readDB = function(query){
 		return new Promise(function(resolve, reject){
 			mysqlDB.query(query,  function(err, rows, fields ){
@@ -40,11 +50,20 @@ module.exports = function (app) {
 				console.log('query error :'+err);
 			}else{
                 console.log(rows);
-                mysqlDB.query(query3,function(err,rows_, fields){
+                mysqlDB.query(query3, async function(err,rows_, fields){
                     if(err){
                         console.log('query error :'+err);
                     }else{
-                        console.log(rows_);
+						console.log(rows_);
+						try {
+							var fcn = 'tx_state';
+							//	  0	      1        2		  3 		  4        5         6	        7		 8	     9
+							//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
+							var args = [, 'match'];
+							await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
+						} catch (err) {
+							console.log(err);
+						}
                     }
                 })
             }
