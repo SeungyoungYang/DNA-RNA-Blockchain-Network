@@ -28,6 +28,7 @@ module.exports = function (app) {
     router.get('/history/:args', async function (req, res) {
         res.status(200);
         
+        var _type = req.query.type;
         var _results_json = new Array();
         var args = [req.params.args];
         var fcn = 'queryBySeller';
@@ -45,6 +46,7 @@ module.exports = function (app) {
         } catch (err) {
             console.log(err);
         }
+        console.log(_type);
         
         res.render('history', {
 			login: req.session.login,
@@ -52,7 +54,9 @@ module.exports = function (app) {
 			username: req.session.username,
 			authority: req.session.authority,
             page: 'null',
-            result: _results_json
+            result: _results_json,
+            sellerID: args,
+            type: _type
 		});
     });
     

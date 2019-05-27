@@ -46,37 +46,22 @@
             color: #333333;
             font: 13px/20px arial;
             padding: 5px 10px;
+            text-align: center;
         }
     </style>
 </head>
 
 <body>
-    <% var select = "ALL"; %>
     <div class="container">
         <h3 style="text-align: center; color: black">판매자 정보</h3>
             <select id="docType" style="float: right" onchange="typeChange(this)">
-                <option value="ALL">전체</option>
-                <option value="TRANSACTION">거래이력</option>
-                <option value="REPORT">신고이력</option>
+                <option value="all" <% if (type == "all") { %> selected <% } %>>전체</option>
+                <option value="transaction" <% if (type == "transaction") { %> selected <% } %>>거래이력</option>
+                <option value="report" <% if (type == "report") { %> selected <% } %>>신고이력</option>
                 </select><br><br>
             <script>
                 function typeChange(e) {
-                    var target = document.getElementById("docType");
-
-                    if(target.options[target.selectedIndex].value == "ALL") {
-                        <% select = "ALL"; %>
-                        console.log('<%-select%>');
-                    }
-                    else if(target.options[target.selectedIndex].value == "TRANSACTION") {
-                        <% select = "TRANSACTION"; %>
-                        console.log('<%-select%>');
-                    }
-                    else if(target.options[target.selectedIndex].value == "REPORT") {
-                        <% select = "REPORT"; %>
-                        console.log('<%-select%>');
-                    }
-                console.log('<%-select%>');
-                    
+                    window.location = "/test/history/<%- sellerID %>?type=" + e.value;
                 }
             </script>
         <div class="wrap">
@@ -91,30 +76,37 @@
                         <td class="r_name">상태</td>
                         <td class="r_name">상세정보</td>
                     </tr>
+                    <% var len = 0; %>
                     <% result.forEach(function (history, index) { %>
-                    <tr>
-                        <td><%- history.timestamp %></td>
-                        <td><%- history.sellerID %></td>
-                        <td><%- history.buyerID %></td>
-                        <td><%- history.product %></td>
-                        <td><%- history.price %></td>
-                        <% if (select != "REPORT" && history.docType == "transaction") { %>
-                            <% if (history.details == "match") { %>
+                        <% if (type == "all" || history.docType ==type) { %>
+                        <tr>
+                            <td><%- history.timestamp %></td>
+                            <td><%- history.sellerID %></td>
+                            <td><%- history.buyerID %></td>
+                            <td><%- history.product %></td>
+                            <td><%- history.price %></td>
+                            <% if (history.docType == "transaction") { %>
+                                <% if (history.details == "match") { %>
                                 <td>MATCH</td>
                                 <td>-</td>
-                            <% } else if (history.details == "cancel") { %>
+                                <% } else if (history.details == "cancel") { %>
                                 <td>CANCEL</td>
                                 <td>-</td>
-                            <% } else if (history.details == "finish") { %>
+                                <% } else if (history.details == "finish") { %>
                                 <td>FINISH</td>
                                 <td>-</td>
+                                <% } %>
+                            <% } else if (history.docType == "report") { %>
+                                <td>REPORT</td>
+                                <td><%- history.details %></td>
                             <% } %>
-                        <% } else if (select != "TRANSACTION" && history.docType == "report") { %>
-                            <td>REPORT</td>
-                            <td><%- history.details %></td>
+                        <% len += 1; %>
+                        </tr>
                         <% } %>
-                    </tr>
                     <% }) %>
+                    <% if (len == 0) { %>
+                        <tr><td colspan="7">이력 정보가 존재하지 않습니다.</td></tr>
+                    <% } %>
                 </tbody>
             </table>
         </div>
