@@ -95,7 +95,7 @@
                 <input type="button" id="button3" onclick="button3_click();" value="queryByUserID"/>
                 <script>
                 function button1_click() {
-                  $.post('/test/channels/mychannel/chaincodes/mycc', { peer: 'peer0.org1.example.com', fcn: 'tx_state', args: '["1","match","binary","승영","2wlstn","jh","준현","01011112222","물건","100"]' }, function (data) {
+                  $.post('/test/channels/mychannel/chaincodes/mycc', { peer: 'peer0.org1.example.com', fcn: 'tx_state', args: '["1","match","binary","승영","UHzCTGsX30gKxNDuyCQHjUpYEgjErl5qtZNxihFwkKM=","jh","준현","01011112222","물건","100"]' }, function (data) {
                                                                 alert(data.msg);
                   })
                 }

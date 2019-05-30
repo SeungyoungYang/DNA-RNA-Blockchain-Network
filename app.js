@@ -81,7 +81,7 @@ var useritemsRouter = require('./routes/user_items.js')(app);
 var productRouter = require('./routes/product.js')(app);
 var cartRouter = require('./routes/cart.js')(app);
 var checkoutRouter = require('./routes/checkout.js')(app);
-var requestRouter = require('./routes/buyrequest.js')(app);
+var requestRouter = require('./routes/request.js')(app);
 
 app.use('/', mainRouter);
 app.use('/test', testRouter);
