@@ -94,7 +94,7 @@ module.exports = function (app) {
 			} else {
 				res.redirect('/product?pid=' + req.query.pid);
 
-				mysqlDB.query(query, function (err, rows, fields) {
+				mysqlDB.query(query, async function (err, rows, fields) {
 					if (err) {
 						console.log('query error :' + err);
 					} else {
@@ -107,11 +107,11 @@ module.exports = function (app) {
 						} catch (err) {
 							console.log('invoke error :' + err);
 						}
-						mysqlDB.query(query2 + rows[1].Number, async function (err, rows_, fields) {
+						mysqlDB.query(query2 + rows[1].Number, function (err, rows_, fields) {
 							if (err) {
 								console.log('query error :' + err);
 							} else {
-
+								res.redirect('/product?pid=' + req.query.pid);
 							}
 						})
 					}
@@ -140,7 +140,7 @@ module.exports = function (app) {
 			} else {
 				res.redirect('/product?pid=' + req.query.pid);
 
-				mysqlDB.query(query, function (err, rows, fields) {
+				mysqlDB.query(query, async function (err, rows, fields) {
 					if (err) {
 						console.log('query error :' + err);
 					} else {
@@ -153,11 +153,11 @@ module.exports = function (app) {
 						} catch (err) {
 							console.log('invoke error :' + err);
 						}
-						mysqlDB.query(query2 + rows[1].Number, async function (err, rows_, fields) {
+						mysqlDB.query(query2 + rows[1].Number, function (err, rows_, fields) {
 							if (err) {
 								console.log('query error :' + err);
 							} else {
-
+								res.redirect('/product?pid=' + req.query.pid);
 							}
 						})
 					}
