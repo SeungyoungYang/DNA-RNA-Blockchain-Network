@@ -946,7 +946,7 @@ section
 {
 	width: 10%;
 }
-.cart_item_quantity
+.cart_item_buyer
 {
 	width: 17%;
 	text-align: center;
@@ -1377,4 +1377,20 @@ label
 .footer_social ul li a i:hover
 {
 	color: #FFFFFF;
+}
+
+.write_button {
+	font-size: 16px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background: rgb(71, 71, 71);
+	margin-top: 0px;
+	border-radius: 3px;
+	border: none;
+	min-height: 40px;
+	min-width: 90px;
+	outline: none !important;
+}
+.write_button:hover {
+	background: #e95a5a;
 }
