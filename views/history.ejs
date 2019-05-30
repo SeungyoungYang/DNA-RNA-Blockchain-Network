@@ -87,13 +87,13 @@
                             <td><%- history.price %></td>
                             <% if (history.docType == "transaction") { %>
                                 <% if (history.details == "match") { %>
-                                <td>MATCH</td>
+                                <td style="color: #fcb022">MATCH</td>
                                 <td>-</td>
                                 <% } else if (history.details == "cancel") { %>
-                                <td>CANCEL</td>
+                                <td style="color: #fc8b22dc">CANCEL</td>
                                 <td>-</td>
                                 <% } else if (history.details == "finish") { %>
-                                <td>FINISH</td>
+                                <td style="color: #44a038">FINISH</td>
                                 <td>-</td>
                                 <% } %>
                             <% } else if (history.docType == "report") { %>

@@ -3,6 +3,7 @@ module.exports = function (app) {
 	var express = require('express');
 	var router = express.Router();
 	var multer = require('multer')
+	var dateFormat = require('dateformat');
 	var timeStamp = Date.now();
 	var mysqlDB = require('../config/db');
 	var _storage = multer.diskStorage({
@@ -59,7 +60,7 @@ module.exports = function (app) {
 		var pd_price = req.body['price'];
 		var pd_content = req.body['content'];
 		var seller = req.session.userID;
-		var timeStamp = Date.now();
+		var timeStamp=dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
 		var pd_img = '/product_img/'+req.file.filename;
 		var pd_id = await readDB('SELECT * FROM newbabodb.Product;');
 		console.log(req.file);
