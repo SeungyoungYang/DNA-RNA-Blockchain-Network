@@ -38,23 +38,6 @@ module.exports = function (app) {
         var order_id = await readpid('SELECT * FROM newbabodb.Order;');
         var buyer_id = req.session.userID;
         console.log(buyer_id);
-		/*
-		mysqlDB.query(query, function(err, rows, fields ){
-			if(err){
-				console.log('query error :'+err);
-			}
-			var thisprod = readDB(query);
-			res.render('product', {
-				login: req.session.login,
-				userid: req.session.userID,
-				username: req.session.username,
-				authority: req.session.authority,
-				page: 'product',
-				items: thisprod,
-				availability: 'yes',
-            });
-		})
-		*/
         mysqlDB.query(query3, async function(err,rows,fields){
             if(err){
 				console.log('query error :'+err);
@@ -62,15 +45,7 @@ module.exports = function (app) {
 				console.log(rows);
 				var thisprod = await readDB(query);
 				console.log(thisprod);
-				res.render('product', {
-					login: req.session.login,
-					userid: req.session.userID,
-					username: req.session.username,
-					authority: req.session.authority,
-					page: 'product',
-					items: thisprod,
-					availability: 'yes',
-				});
+				res.redirect('/product?pid='+req.query.pid);
                 mysqlDB.query(query2, [0, req.session.userID, req.query.pid, 1, 0,order_id], async function(err,rows_, fields){
                     if(err){
                         console.log('query error :'+err);

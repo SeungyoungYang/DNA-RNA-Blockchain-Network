@@ -40,20 +40,21 @@
 			<div class="col">
 
 				<!-- Cart Item -->
+				<% for (var index in my_items){%>
 				<div
 					class="cart_item d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
 					<!-- Name -->
 					<div class="cart_item_product d-flex flex-row align-items-center justify-content-start">
 						<div class="cart_item_image">
-							<div><img src="images/cart_1.jpg" alt=""></div>
+							<div><img src=<%- my_items[index].img_path %> alt=""></div>
 						</div>
 						<div class="cart_item_name_container">
-							<div class="cart_item_name"><a href="#">Smart Phone Deluxe Edition</a></div>
+							<div class="cart_item_name"><a href="#"><%- my_items[index].Product_name %></a></div>
 							<div class="cart_item_edit"><a href="#">Edit Product</a></div>
 						</div>
 					</div>
 					<!-- Price -->
-					<div class="cart_item_price">$790.90</div>
+					<div class="cart_item_price"><%- my_items[index].Product_price %></div>
 					<!-- Quantity -->
 					<div class="cart_item_quantity">
 						<div class="product_quantity_container">

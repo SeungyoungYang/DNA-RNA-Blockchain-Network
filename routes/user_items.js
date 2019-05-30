@@ -10,14 +10,16 @@ module.exports = function (app) {
 
 		//console.log(req.session);
 		//req.session.userID
+		sellitemquery = 'SELECT * FROM newbabodb.Product AS Pd INNER JOIN newbabodb.Order AS Od ON Pd.Product_id = Od.Product_id WHERE Pd.Member_id =';
+		sellitemquery += '\''+req.session.userID+'\';';
 		querystring = 'SELECT * FROM newbabodb.Product where Member_id=';
 		querystring += '\''+req.session.userID+'\'';
 		//console.log(querystring);
-		mysqlDB.query(querystring,function(err, rows, fields ){
+		mysqlDB.query(sellitemquery,function(err, rows, fields ){
 			if(err){
 				console.log('query error :'+err);
 			}
-			//console.log(rows);
+			console.log(rows);
 			//console.log(rows[0].Member_id);
 			res.render('user_items', {
 				login: req.session.login,
