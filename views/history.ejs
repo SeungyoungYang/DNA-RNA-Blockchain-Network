@@ -87,7 +87,7 @@
                             <td><%- history.price %></td>
                             <% if (history.docType == "transaction") { %>
                                 <% if (history.details == "match") { %>
-                                <td>MATCH</td>
+                                <td style="color: #fcb022">MATCH</td>
                                 <td>-</td>
                                 <% } else if (history.details == "cancel") { %>
                                 <td>CANCEL</td>
