@@ -37,16 +37,15 @@
 
 					<!-- Product Quantity -->
 					<div class="product_quantity_container">
-						<% if(items[0].status == 0) { %>
-							<div class="button cart_button"><a href="#" onclick="buyrequest()" >구매 요청</a></div>
-						<% } else { %>
-							<div class="button cart_button"><a href="#" onclick="buyrequest()" >구매 요청</a></div>
+						<% if(items[0].status == 1) { %>
+							<div class="button cart_button"><a onclick="alert('구매가 진행중이므로 구매요청을 할 수 없습니다.');" >구매 요청</a></div>
+						<% } else if(login != "login"){ %>
+							<div class="button cart_button"><a onclick="alert('로그인이 필요한 서비스입니다.');" >구매 요청</a></div>
+						<% } else {%>
+							<div class="button cart_button"><a href="/request?pid=<%- items[0].Product_id%>" onclick="buyrequest()">구매 요청</a> </div>
 						<% } %>
 						<script>
 							function buyrequest(){
-								//if(userid==items[0].)
-								location.href = "/request?pid=<%- items[0].Product_id%>";
-								window.location.reload();
 								alert("구매요청이 완료되었습니다.");
 							}	
 						</script>
