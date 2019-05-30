@@ -46,7 +46,6 @@ module.exports = function (app) {
         } catch (err) {
             console.log(err);
         }
-        console.log(_type);
         
         res.render('history', {
 			login: req.session.login,

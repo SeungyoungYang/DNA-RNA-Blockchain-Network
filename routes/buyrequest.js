@@ -59,7 +59,7 @@ module.exports = function (app) {
 							var fcn = 'tx_state';
 							//	  0	      1        2		  3 		  4        5         6	        7		 8	     9
 							//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
-							var args = [, 'match'];
+							var args = [req.query.pid, 'match', , req.session.userID, req.session.usernam, ];
 							await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
 						} catch (err) {
 							console.log(err);
