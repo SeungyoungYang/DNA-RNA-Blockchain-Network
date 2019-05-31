@@ -58,10 +58,11 @@
 							<div class="cart_item_buyer"><%- my_request[index].Member_id%></div>
 							<!-- Total -->
 							<div class="cart_item_total">
+								<button class="write_button" onclick="location.href='/user_requests/cancel?item=<%- my_request[index].Product_id %>'">취소</button>
 							</div>
 							
 						<% } else{ %>
-							<div class="cart_item_price">대기중</div>
+							<div class="cart_item_price">취소</div>
 							<!-- 구매자 -->
 							<div class="cart_item_buyer">-</div>
 							<!-- Total -->
