@@ -66,7 +66,7 @@ module.exports = function (app) {
 		var pd_id = await readDB('SELECT * FROM newbabodb.Product;');
 		console.log(req.file);
 		mysqlDB.query('insert into newbabodb.Product value(?,?,?,?,?,?,?,?)',[pd_id,pd_img,seller,pd_price,pd_name,pd_content,timeStamp,0],function(err,rows,field){
-			console.log(rows);
+			if (err) console.log(err);
 		})
 		res.redirect('/items');
 	});
