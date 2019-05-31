@@ -55,6 +55,7 @@ module.exports = function (app) {
 			});
 		})
 	}
+	
 	router.post('/registration', upload.single('img1'),  async function (req, res) {
 		var pd_name = req.body['product_name'];
 		var pd_price = req.body['price'];
