@@ -41,8 +41,10 @@
 							<div class="button cart_button"><a onclick="alert('구매가 진행중이므로 구매요청을 할 수 없습니다.');" >구매 요청</a></div>
 						<% } else if(login != "login"){ %>
 							<div class="button cart_button"><a onclick="alert('로그인이 필요한 서비스입니다.');" >구매 요청</a></div>
+						<% } else if(items[0].Member_id == userid){ %>
+							<div class="button cart_button"><a onclick="alert('자신의 물품에 구매요청할 수 없습니다..');" >구매 요청</a></div>
 						<% } else {%>
-							<div class="button cart_button"><a href="/request?pid=<%- items[0].Product_id%>" onclick="buyrequest()">구매 요청</a> </div>
+							<div class="button cart_button"><a href="/request/match?pid=<%- items[0].Product_id%>" onclick="buyrequest()">구매 요청</a> </div>
 						<% } %>
 						<script>
 							function buyrequest(){

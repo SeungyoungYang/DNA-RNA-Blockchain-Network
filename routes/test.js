@@ -37,36 +37,36 @@ module.exports = function (app) {
             if (err) {
                 console.log('query error :' + err);
             } else {
-                var args = [rows];
+                var args = [rows[0].RRN_hash];
                 var fcn = 'queryBySeller';
                 var _result;
-
                 try {
                     _result = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, username, orgname);
-                    if (_result == '') { }
+                    if (_result == '');
                     else {
                         var _results = _result.split('&&');
                         for (var i = 0; i < _results.length; i++) {
                             _results_json.push(JSON.parse(_results[i]));
                         }
                     }
+
+                    res.render('history', {
+                        login: req.session.login,
+                        userid: req.session.userID,
+                        username: req.session.username,
+                        authority: req.session.authority,
+                        page: 'null',
+                        result: _results_json,
+                        sellerID: req.params.args,
+                        type: _type
+                    });
+
                 } catch (err) {
                     console.log(err);
                 }
             }
         })
-
-
-        res.render('history', {
-            login: req.session.login,
-            userid: req.session.userID,
-            username: req.session.username,
-            authority: req.session.authority,
-            page: 'null',
-            result: _results_json,
-            sellerID: req.query.args,
-            type: _type
-        });
+        
     });
 
     router.get('/channels/:channelName/chaincodes/:chaincodeName', async function (req, res) {
