@@ -78,6 +78,7 @@ module.exports = function (app) {
 					} else {
 						mysqlDB.query(query, async function (err, rows, fields) {
 							if (err) {
+								console.log(rows);
 								console.log('query error :' + err);
 							} else {
 								try {
@@ -195,7 +196,6 @@ module.exports = function (app) {
 			if (err) {
 				console.log('query3 error :' + err);
 			} else {
-				res.redirect('/product?pid=' + req.query.pid);
 
 				mysqlDB.query(query, async function (err, rows, fields) {
 					if (err) {
@@ -210,11 +210,11 @@ module.exports = function (app) {
 						} catch (err) {
 							console.log('invoke error :' + err);
 						}
-						mysqlDB.query(query2 + rows[1].Number, function (err, rows_, fields) {
+						mysqlDB.query(query2 + rows[1].Number.toString(), function (err, rows_, fields) {
 							if (err) {
 								console.log('query2 error :' + err);
 							} else {
-								res.redirect('/product?pid=' + req.query.pid);
+								res.redirect('back');
 							}
 						})
 					}
