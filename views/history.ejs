@@ -89,15 +89,18 @@
                                 <% if (history.details == "match") { %>
                                 <td style="color: #fcb022">MATCH</td>
                                 <td>-</td>
-                                <% } else if (history.details == "cancel") { %>
-                                <td style="color: #fc8b22dc">CANCEL</td>
+                                <% } else if (history.details == "shipping") { %>
+                                <td style="color: #224afcdc">Shipping</td>
                                 <td>-</td>
                                 <% } else if (history.details == "finish") { %>
                                 <td style="color: #44a038">FINISH</td>
                                 <td>-</td>
+                                <% } else if (history.details == "cancel") { %>
+                                <td style="color: #fc8b22dc">CANCEL</td>
+                                <td>-</td>
                                 <% } %>
                             <% } else if (history.docType == "report") { %>
-                                <td>REPORT</td>
+                                <td style="color: #fc2222ec">REPORT</td>
                                 <td><%- history.details %></td>
                             <% } %>
                         <% len += 1; %>
