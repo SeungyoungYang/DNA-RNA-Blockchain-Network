@@ -8,7 +8,6 @@ module.exports = function (app) {
 	var readDB = function(query){
 		return new Promise(function(resolve, reject){
 			mysqlDB.query(query,  function(err, rows, fields ){
-				console.log(rows);
 				resolve(rows);
 			});
 		})
