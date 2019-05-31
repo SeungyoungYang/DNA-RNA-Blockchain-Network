@@ -234,9 +234,9 @@ func (t *SimpleChaincode) tx_state(stub shim.ChaincodeStubInterface, args []stri
 	
 	var err error
 
-	//	  0	      1        2		  3 		 4         5         6	        7		 8	     9
-	//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
-	if len(args) != 10 {
+	//	  0	      1        2		  3 		 4         5         6	        7		 8	     9	   10
+	//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price  web
+	if len(args) != 11 {
 		return shim.Error("Incorrect number of arguments. Expecting name of the person to query")
 	}
 
@@ -257,6 +257,7 @@ func (t *SimpleChaincode) tx_state(stub shim.ChaincodeStubInterface, args []stri
 	// }
 	product := args[8]
 	price := args[9]
+	web := args[10]
 
 	objectType := "transaction"
 	tx := &doc{objectType, timestamp, txID, txState, sellerID, sellerName, sellerRNN, buyerID, buyerName, buyerRNN, product, price}
@@ -266,7 +267,7 @@ func (t *SimpleChaincode) tx_state(stub shim.ChaincodeStubInterface, args []stri
 	}
 
 	// Write the state to the ledger
-	err = stub.PutState(txID + "_" + txState, txJSONasBytes)
+	err = stub.PutState(web + "_" + txID + "_" + txState, txJSONasBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -281,9 +282,9 @@ func (t *SimpleChaincode) report(stub shim.ChaincodeStubInterface, args []string
 
 	var err error
 
-	//	  0	     1   	   2		 3 	   	     4        5          6	        7        8	     9
-	//	txID  details  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
-	if len(args) != 10 {
+	//	  0	     1   	   2		 3 	   	     4        5          6	        7        8	     9     10
+	//	txID  details  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price  web
+	if len(args) != 11 {
 		return shim.Error("Incorrect number of arguments. Expecting name of the person to query")
 	}
 
@@ -304,6 +305,7 @@ func (t *SimpleChaincode) report(stub shim.ChaincodeStubInterface, args []string
 	// }
 	product := args[8]
 	price := args[9]
+	web := args[10]
 
 	objectType := "report"
 	rp := &doc{objectType, timestamp, txID, details, sellerID, sellerName, sellerRNN, buyerID, buyerName, buyerRNN, product, price}
@@ -313,7 +315,7 @@ func (t *SimpleChaincode) report(stub shim.ChaincodeStubInterface, args []string
 	}
 
 	// Write the state to the ledger
-	err = stub.PutState(txID + "_report", rpJSONasBytes)
+	err = stub.PutState(web + "_" + txID + "_report", rpJSONasBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}

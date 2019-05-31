@@ -41,7 +41,7 @@ module.exports = function (app) {
 									var fcn = 'tx_state';
 									//	  0	      1        2		  3 		  4        5         6	        7		 8	     9
 									//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
-									var args = [rows[1].Number.toString(), 'match', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString()];
+									var args = [rows[1].Number.toString(), 'match', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), dna.username];
 									await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
 								} catch (err) {
 									console.log('invoke error :' + err);
@@ -80,7 +80,7 @@ module.exports = function (app) {
 							var fcn = 'tx_state';
 							//	  0	      1        2		  3 		  4        5         6	        7		 8	     9
 							//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
-							var args = [rows[1].Number.toString(), 'shipping', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString()];
+							var args = [rows[1].Number.toString(), 'shipping', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), dna.username];
 							await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
 						} catch (err) {
 							console.log('invoke error :' + err);
@@ -117,7 +117,7 @@ module.exports = function (app) {
 							var fcn = 'tx_state';
 							//	  0	      1        2		  3 		  4        5         6	        7		 8	     9
 							//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
-							var args = [rows[1].Number.toString(), 'finish', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString()];
+							var args = [rows[1].Number.toString(), 'finish', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), dna.username];
 							await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
 						} catch (err) {
 							console.log('invoke error :' + err);
@@ -162,7 +162,7 @@ module.exports = function (app) {
 							var fcn = 'tx_state';
 							//	  0	      1        2		  3 		  4        5         6	        7		 8	     9
 							//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
-							var args = [rows[1].Number.toString(), 'cancel', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString()];
+							var args = [rows[1].Number.toString(), 'cancel', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), dna.username];
 							await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
 						} catch (err) {
 							console.log('invoke error :' + err);
