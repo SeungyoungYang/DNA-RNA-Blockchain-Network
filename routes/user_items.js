@@ -21,8 +21,7 @@ module.exports = function (app) {
 		//req.session.userID
 		var sellitemquery = 'SELECT * FROM newbabodb.Product AS Pd ';
 		sellitemquery+='LEFT OUTER JOIN newbabodb.Order AS Od ON Pd.Product_id = Od.Product_id WHERE Pd.Member_id =' ;
-		sellitemquery += '\''+req.session.userID+'\'';
-		sellitemquery += ' and (Od.Product_status!=-1 or Pd.status=0);';		
+		sellitemquery += '\''+req.session.userID+'\';';		
 		console.log(sellitemquery);
 		var my_list = await readDB(sellitemquery);
 		res.render('user_items', {
@@ -36,7 +35,7 @@ module.exports = function (app) {
 	});
 
 	router.get('/cancel', async function (req, res){
-		var cancelquery = 'UPDATE newbabodb.Order SET Product_status=-1 WHERE Number='+'\''+req.query.num+'\'';
+		var cancelquery = 'DELETE FROM newbabodb.Order WHERE Number='+'\''+req.query.num+'\'';
 		var cancelquery2 = 'UPDATE newbabodb.Product SET status=0 WHERE Product_id='+'\''+req.query.item+'\'';
 		console.log(cancelquery);
 		console.log(cancelquery2);
