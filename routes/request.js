@@ -15,7 +15,6 @@ module.exports = function (app) {
 	var orgname = dna.orgname;
 
 	router.get('/match', async function (req, res) {
-		var buyerID = req.session.userID;
 		var query = 'select id,Member_name,RRN_hash,Product_name,Product_price,Number\
 					from newbabodb.Member, newbabodb.Product, newbabodb.Order\
 					where id =(select Member_id from newbabodb.Order where Product_id = ' + req.query.pid + ') and Product.Product_id = ' + req.query.pid + ' and Order.Product_id = ' + req.query.pid + '\
@@ -23,17 +22,16 @@ module.exports = function (app) {
 					select id,Member_name,RRN_hash,Product_name,Product_price, Number\
 					from newbabodb.Member, newbabodb.Product, newbabodb.Order\
 					where id =(select Member_id from newbabodb.Product where Product_id = ' + req.query.pid + ') and Product.Product_id = ' + req.query.pid + ' and Order.Product_id = ' + req.query.pid;
-		var query2 = 'insert into newbabodb.Order value(?,?,?,?,?)'
+		var query2 = 'insert into newbabodb.Order (invoice_number, Member_id, Product_id, Product_status,status_read) values(?,?,?,?,?)';
 		var query3 = 'UPDATE newbabodb.Product SET status=1 WHERE Product_id = ' + req.query.pid + ';';
 
 		mysqlDB.query(query3, async function (err, rows__, fields) {
 			if (err) {
-				console.log('query error :' + err);
+				console.log('query3 error :' + err);
 			} else {
-
-				mysqlDB.query(query2, [0, buyerID, req.query.pid, 1, 0], function (err, rows_, fields) {
+				mysqlDB.query(query2, [0, req.session.userID, req.query.pid, 1, 0], function (err, rows_, fields) {
 					if (err) {
-						console.log('query error :' + err);
+						console.log('query2 error :' + err);
 					} else {
 						mysqlDB.query(query, async function (err, rows, fields) {
 							if (err) {
@@ -72,10 +70,8 @@ module.exports = function (app) {
 
 		mysqlDB.query(query2, async function (err, rows__, fields) {
 			if (err) {
-				console.log('query error :' + err);
+				console.log('query2 error :' + err);
 			} else {
-				res.redirect('/product?pid=' + req.query.pid);
-
 				mysqlDB.query(query, async function (err, rows, fields) {
 					if (err) {
 						console.log('query error :' + err);
@@ -111,10 +107,8 @@ module.exports = function (app) {
 
 		mysqlDB.query(query3, async function (err, rows__, fields) {
 			if (err) {
-				console.log('query error :' + err);
+				console.log('query3 error :' + err);
 			} else {
-				res.redirect('/product?pid=' + req.query.pid);
-
 				mysqlDB.query(query, async function (err, rows, fields) {
 					if (err) {
 						console.log('query error :' + err);
@@ -130,7 +124,7 @@ module.exports = function (app) {
 						}
 						mysqlDB.query(query2 + rows[1].Number, function (err, rows_, fields) {
 							if (err) {
-								console.log('query error :' + err);
+								console.log('query2 error :' + err);
 							} else {
 								res.redirect('/product?pid=' + req.query.pid);
 							}
@@ -156,7 +150,7 @@ module.exports = function (app) {
 
 		mysqlDB.query(query3, async function (err, rows__, fields) {
 			if (err) {
-				console.log('query error :' + err);
+				console.log('query3 error :' + err);
 			} else {
 				res.redirect('/product?pid=' + req.query.pid);
 
@@ -175,7 +169,7 @@ module.exports = function (app) {
 						}
 						mysqlDB.query(query2 + rows[1].Number, function (err, rows_, fields) {
 							if (err) {
-								console.log('query error :' + err);
+								console.log('query2 error :' + err);
 							} else {
 								res.redirect('/product?pid=' + req.query.pid);
 							}
