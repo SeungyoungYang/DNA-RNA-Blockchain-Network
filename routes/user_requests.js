@@ -18,9 +18,10 @@ module.exports = function (app) {
 		res.status(200);
 
 		var buyitemquery = 
-        "select * from newbabodb.Product \
+        "select * from newbabodb.Product\
         where Product_id in (select Product_id from newbabodb.Order where Member_id ='"+req.session.userID+"')";
 		console.log(buyitemquery);
+
 		var my_list = await readDB(buyitemquery);
 		res.render('user_requests', {
 			login: req.session.login,
@@ -33,7 +34,7 @@ module.exports = function (app) {
 	});
 
 	router.get('/cancel', async function (req, res){
-		var cancelquery = 'UPDATE newbabodb.Order SET Product_status=-1 WHERE Number='+'\''+req.query.num+'\'';
+		var cancelquery = 'DELETE FROM newbabodb.Order WHERE Product_id='+'\''+req.query.item+'\'';
 		var cancelquery2 = 'UPDATE newbabodb.Product SET status=0 WHERE Product_id='+'\''+req.query.item+'\'';
 		console.log(cancelquery);
 		console.log(cancelquery2);

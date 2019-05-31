@@ -50,8 +50,8 @@ module.exports = function (app) {
 	var readDB = function(query){
 		return new Promise(function(resolve, reject){
 			mysqlDB.query(query,  function(err, rows, fields ){
-				var pd_id= rows.length+1;
-				resolve(pd_id);
+				//var pd_id= rows.length+1;
+				resolve();
 			});
 		})
 	}
@@ -61,12 +61,12 @@ module.exports = function (app) {
 		var pd_price = req.body['price'];
 		var pd_content = req.body['content'];
 		var seller = req.session.userID;
-		var timeStamp=dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
+		var time=dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
 		var pd_img = '/product_img/'+req.file.filename;
-		var pd_id = await readDB('SELECT * FROM newbabodb.Product;');
-		console.log(req.file);
-		mysqlDB.query('insert into newbabodb.Product value(?,?,?,?,?,?,?,?)',[pd_id,pd_img,seller,pd_price,pd_name,pd_content,timeStamp,0],function(err,rows,field){
-			console.log(rows);
+		//var pd_id = await readDB('SELECT * FROM newbabodb.Product;');
+		var queryString = 'insert into newbabodb.Product (img_path, Member_id, Product_price, Product_name, Product_content, date, status) values(?,?,?,?,?,?,?)';
+		mysqlDB.query(queryString,[pd_img,seller,pd_price,pd_name,pd_content,time,0],function(err,rows,field){
+			//console.log(err);
 		})
 		res.redirect('/items');
 	});
