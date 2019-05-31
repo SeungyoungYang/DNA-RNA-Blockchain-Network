@@ -189,7 +189,7 @@ module.exports = function (app) {
 					select id,Member_name,RRN_hash,Product_name,Product_price, Number\
 					from newbabodb.Member, newbabodb.Product, newbabodb.Order\
 					where id =(select Member_id from newbabodb.Product where Product_id = ' + req.query.pid + ') and Product.Product_id = ' + req.query.pid + ' and Order.Product_id = ' + req.query.pid;
-		var query2 = 'DELETE * newbabodb.Order WHERE Number = ';
+		var query2 = 'DELETE FROM newbabodb.Order WHERE Product_id='+'\''+req.query.pid+'\'';
 		var query3 = 'UPDATE newbabodb.Product SET status=0 WHERE Product_id = ' + req.query.pid + ';';
 
 		mysqlDB.query(query3, async function (err, rows__, fields) {
@@ -210,7 +210,7 @@ module.exports = function (app) {
 						} catch (err) {
 							console.log('invoke error :' + err);
 						}
-						mysqlDB.query(query2 + rows[1].Number.toString(), function (err, rows_, fields) {
+						mysqlDB.query(query2, function (err, rows_, fields) {
 							if (err) {
 								console.log('query2 error :' + err);
 							} else {
