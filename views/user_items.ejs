@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="/styles/bootstrap4/bootstrap.min.css">
 <div class="home">
 	<div class="home_container">
 		<div class="home_background" style="background-image:url(/images/cart.jpg)"></div>
@@ -58,9 +59,20 @@
 							<div class="cart_item_buyer"><%- my_items[index].Member_id%></div>
 							<!-- Total -->
 							<div class="cart_item_total">
+								  
+								<button class="write_button" type="button" data-toggle="collapse" data-target="#invoice_number_<%- index %>"
+								aria-controls="invoice_number_<%- index %>" aria-expanded="false" aria-label="Toggle navigation"><span class="dark-blue-text">
+									진행</span>
+								</button>
+								
 								<button class="write_button" onclick="location.href='/user_items/cancel?num=<%- my_items[index].Number %>&item=<%- my_items[index].Product_id %>'">취소</button>
 							</div>
-							
+						<% } else if(my_items[index].status==2){ %>
+							<div class="cart_item_price">배송중</div>
+							<!-- 구매자 -->
+							<div class="cart_item_buyer"><%- my_items[index].Member_id%></div>
+							<!-- Total -->
+							<div class="cart_item_total">-</div>
 						<% } else{ %>
 							<div class="cart_item_price">대기중</div>
 							<!-- 구매자 -->
@@ -69,8 +81,27 @@
 							<div class="cart_item_total">-</div>
 						<%} %>
 					</div>
+					<div class="collapse navbar-collapse" id="invoice_number_<%- index %>" >	
+						<!--div class="invoice_form active"-->
+							<div class="container">
+								<div class="row">
+									<div class="col">
+										<div class="invoice_form_content d-flex flex-row align-items-center justify-content-end">
+											<form action="/user_items/invoice" method="post">
+												<input type="hidden" name="number" value=<%- my_items[index].Number %> >
+												<input type="hidden" name="pd_id" value=<%- my_items[index].Product_id %> >
+												<input type="text" class="invoice_input" name="invoice" placeholder="송장번호를 입력하세요." required="required">
+												<submit>
+													<button class="write_button"onclick="alert('거래 상태가 변경되었습니다.')">입력</button>
+												</submit>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						
+					</div>
 				<% } %>
-
 			</div>
 		</div>
 	</div>

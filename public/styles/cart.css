@@ -1394,3 +1394,62 @@ label
 .write_button:hover {
 	background: #e95a5a;
 }
+
+.invoice_form
+{
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background: #e4e4e4;
+	z-index: -1;
+}
+
+.invoice_form_content
+{
+	height: 80px;
+}
+
+.invoice_input
+{
+	width: 300px;
+	height: 40px;
+	border-radius: 3px;
+	padding-left: 20px;
+	color: #db5246;
+}
+.invoice_input::-webkit-input-placeholder
+{
+	font-size: 14px !important;
+	font-weight: 400 !important;
+	font-style: italic;
+	color: #767676 !important;
+}
+.invoice_input:-moz-placeholder
+{
+	font-size: 14px !important;
+	font-weight: 400 !important;
+	font-style: italic;
+	color: #767676 !important;
+}
+.invoice_input::-moz-placeholder
+{
+	font-size: 14px !important;
+	font-weight: 400 !important;
+	font-style: italic;
+	color: #767676 !important;
+} 
+.invoice_input:-ms-input-placeholder
+{ 
+	font-size: 14px !important;
+	font-weight: 400 !important;
+	font-style: italic;
+	color: #767676 !important;
+}
+.invoice_input::input-placeholder
+{
+	font-size: 14px !important;
+	font-weight: 400 !important;
+	font-style: italic;
+	color: #767676 !important;
+}
