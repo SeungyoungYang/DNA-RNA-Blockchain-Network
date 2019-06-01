@@ -26,6 +26,12 @@ module.exports = function (app) {
         });
     });
 
+    function date_descending(a, b) {
+        var dateA = new Date(a.timestamp).getTime();
+        var dateB = new Date(b.timestamp).getTime();
+        return dateA < dateB ? 1 : -1;
+        };
+        
     router.get('/history/:args', async function (req, res) {
         res.status(200);
 
@@ -48,6 +54,11 @@ module.exports = function (app) {
                         for (var i = 0; i < _results.length; i++) {
                             _results_json.push(JSON.parse(_results[i]));
                         }
+                        //sorting
+                        if(_results.length>1){
+                            _results_json.sort(date_descending);
+                        }
+
                     }
 
                     res.render('history', {

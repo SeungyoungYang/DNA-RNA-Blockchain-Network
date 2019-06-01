@@ -64,8 +64,7 @@
 								aria-controls="invoice_number_<%- index %>" aria-expanded="false" aria-label="Toggle navigation"><span class="dark-blue-text">
 									진행</span>
 								</button>
-								
-								<button class="write_button" onclick="location.href='/user_items/cancel?num=<%- my_items[index].Number %>&item=<%- my_items[index].Product_id %>'">취소</button>
+								<button class="write_button" onclick="location.href='/request/cancel?pid=<%- my_items[index].Product_id %>'">취소</button>
 							</div>
 						<% } else if(my_items[index].status==2){ %>
 							<div class="cart_item_price">배송중</div>
