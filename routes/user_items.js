@@ -22,7 +22,7 @@ module.exports = function (app) {
 		var changestatusquery = 'UPDATE newbabodb.Product SET status=2 WHERE Product_id='+'\''+pd_id+'\';';
 		await readDB(invoicequery);
 		await readDB(changestatusquery);
-		res.redirect('/user_items');
+		res.redirect('/user/items');
 	})
 
 	return router;
