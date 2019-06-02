@@ -7,21 +7,13 @@ module.exports = function (app) {
 	var invoke = require('../blockchain/invoke-transaction.js');
 	var query = require('../blockchain/query.js');
 	var dna = require('../config/dna');
+	var readDB = require('./readDB');
 
 	var peer = dna.peer;
 	var channelName = dna.channelName;
 	var chaincodeName = dna.chaincodeName;
 	var username = dna.username;
 	var orgname = dna.orgname;
-
-	var readDB = function(query){
-		return new Promise(function(resolve, reject){
-			mysqlDB.query(query,  function(err, rows, fields ){
-				console.log(rows);
-				resolve(rows);
-			});
-		})
-	}
 
 	router.get('/history/:args', async function (req, res) {
         res.status(200);
@@ -126,7 +118,6 @@ module.exports = function (app) {
 							WHERE Number='+'\''+number+'\';';
 		var changestatusquery = 'UPDATE newbabodb.Product SET status=2 WHERE Product_id = ' + pid + ';';
 
-		console.log(req.body);
 		mysqlDB.query(query, async function (err, rows, fields) {
 			if (err) {
 				console.log('query error :' + err);
