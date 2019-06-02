@@ -7,6 +7,7 @@ module.exports = function (app) {
 	var invoke = require('../blockchain/invoke-transaction.js');
 	var query = require('../blockchain/query.js');
 	var dna = require('../config/dna');
+	var readDB = require('./readDB');
 
 	var peer = dna.peer;
 	var channelName = dna.channelName;
@@ -83,8 +84,8 @@ module.exports = function (app) {
 							} else {
 								try {
 									var fcn = 'tx_state';
-									//	  0	      1        2		  3 		  4        5         6	        7		 8	     9
-									//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
+									//	  0	      1        2		  3 		  4        5         6	        7		 8	     9	   10
+									//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price  web
 									var args = [rows[1].Number.toString(), 'match', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), username];
 									await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
 								} catch (err) {
@@ -102,39 +103,39 @@ module.exports = function (app) {
 
 	});
 	
-	router.get('/shipping', async function (req, res) {
+	router.post('/shipping', async function (req, res) {
+		var invoice = req.body['invoice'];
+		var number = req.body['number'];
+		var pid = req.body['pd_id'];
 		var query = 'select id,Member_name,RRN_hash,Product_name,Product_price,Number\
 					from newbabodb.Member, newbabodb.Product, newbabodb.Order\
-					where id =(select Member_id from newbabodb.Order where Product_id = ' + req.query.pid + ') and Product.Product_id = ' + req.query.pid + ' and Order.Product_id = ' + req.query.pid + '\
+					where id =(select Member_id from newbabodb.Order where Product_id = ' + pid + ') and Product.Product_id = ' + pid + ' and Order.Product_id = ' + pid + '\
 					union\
 					select id,Member_name,RRN_hash,Product_name,Product_price, Number\
 					from newbabodb.Member, newbabodb.Product, newbabodb.Order\
-					where id =(select Member_id from newbabodb.Product where Product_id = ' + req.query.pid + ') and Product.Product_id = ' + req.query.pid + ' and Order.Product_id = ' + req.query.pid;
-		var query2 = 'UPDATE newbabodb.Product SET status=2 WHERE Product_id = ' + req.query.pid + ';';
+					where id =(select Member_id from newbabodb.Product where Product_id = ' + pid + ') and Product.Product_id = ' + pid + ' and Order.Product_id = ' + pid;
+		var invoicequery = 'UPDATE newbabodb.Order SET invoice_number='+'\''+invoice+'\'\
+							WHERE Number='+'\''+number+'\';';
+		var changestatusquery = 'UPDATE newbabodb.Product SET status=2 WHERE Product_id = ' + pid + ';';
 
-		mysqlDB.query(query2, async function (err, rows__, fields) {
+		mysqlDB.query(query, async function (err, rows, fields) {
 			if (err) {
-				console.log('query2 error :' + err);
+				console.log('query error :' + err);
 			} else {
-				mysqlDB.query(query, async function (err, rows, fields) {
-					if (err) {
-						console.log('query error :' + err);
-					} else {
-						try {
-							var fcn = 'tx_state';
-							//	  0	      1        2		  3 		  4        5         6	        7		 8	     9
-							//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
-							var args = [rows[1].Number.toString(), 'shipping', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), username];
-							await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
-						} catch (err) {
-							console.log('invoke error :' + err);
-						}
-						res.redirect('/product?pid=' + req.query.pid);
-					}
-				})
+				try {
+					var fcn = 'tx_state';
+					//	  0	      1        2		  3 		  4        5         6	        7		 8	     9	   10
+					//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price  web
+					var args = [rows[1].Number.toString(), 'shipping', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), username];
+					await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
+					await readDB(invoicequery);
+					await readDB(changestatusquery);
+				} catch (err) {
+					console.log('invoke error :' + err);
+				}
 			}
-
 		})
+		res.redirect('/user/items');
 
 	});
 
@@ -159,8 +160,8 @@ module.exports = function (app) {
 					} else {
 						try {
 							var fcn = 'tx_state';
-							//	  0	      1        2		  3 		  4        5         6	        7		 8	     9
-							//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
+							//	  0	      1        2		  3 		  4        5         6	        7		 8	     9	   10
+							//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price  web
 							var args = [rows[1].Number.toString(), 'finish', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), username];
 							await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
 						} catch (err) {
@@ -203,8 +204,8 @@ module.exports = function (app) {
 					} else {
 						try {
 							var fcn = 'tx_state';
-							//	  0	      1        2		  3 		  4        5         6	        7		 8	     9
-							//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
+							//	  0	      1        2		  3 		  4        5         6	        7		 8	     9	   10
+							//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price  web
 							var args = [rows[1].Number.toString(), 'cancel', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), username];
 							await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
 						} catch (err) {
@@ -246,8 +247,8 @@ module.exports = function (app) {
 					} else {
 						try {
 							var fcn = 'report';
-							//	  0	      1        2		  3 		  4        5         6	        7		 8	     9
-							//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price
+							//	  0	     1   	   2		 3 	   	     4        5          6	        7        8	     9     10
+							//	txID  details  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price  web
 							var args = [rows[1].Number.toString(), 'report', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), username];
 							await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
 						} catch (err) {
@@ -257,7 +258,7 @@ module.exports = function (app) {
 							if (err) {
 								console.log('query2 error :' + err);
 							} else {
-								res.redirect('/product?pid=' + req.query.pid);
+								res.redirect('/user/requests');
 							}
 						})
 					}

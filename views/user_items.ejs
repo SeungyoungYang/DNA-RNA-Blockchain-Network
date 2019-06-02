@@ -1,27 +1,3 @@
-<link rel="stylesheet" type="text/css" href="/styles/bootstrap4/bootstrap.min.css">
-<div class="home">
-	<div class="home_container">
-		<div class="home_background" style="background-image:url(/images/cart.jpg)"></div>
-		<div class="home_content_container">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						<div class="home_content">
-							<div class="breadcrumbs">
-								<ul>
-									<li><a href="index.html">Home</a></li>
-									<li><a href="categories.html">Categories</a></li>
-									<li>내가 올린 상품</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
 <div class="cart_info">
 	<div class="container">
 		<div class="row">
@@ -86,7 +62,7 @@
 								<div class="row">
 									<div class="col">
 										<div class="invoice_form_content d-flex flex-row align-items-center justify-content-end">
-											<form action="/user_items/invoice" method="post">
+											<form action="/request/shipping" method="post">
 												<input type="hidden" name="number" value=<%- my_items[index].Number %> >
 												<input type="hidden" name="pd_id" value=<%- my_items[index].Product_id %> >
 												<input type="text" class="invoice_input" name="invoice" placeholder="송장번호를 입력하세요." required="required">
