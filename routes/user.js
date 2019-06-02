@@ -3,15 +3,7 @@ module.exports = function (app) {
 	var express = require('express');
 	var router = express.Router();
 	var timeStamp = Date.now();
-	var mysqlDB = require('../config/db');
-	
-	var readDB = function(query){
-		return new Promise(function(resolve, reject){
-			mysqlDB.query(query,  function(err, rows, fields ){
-				resolve(rows);
-			});
-		})
-	}
+	var readDB = require('./readDB');
 	
 	router.get('/items', async function (req, res) {
 		res.status(200);

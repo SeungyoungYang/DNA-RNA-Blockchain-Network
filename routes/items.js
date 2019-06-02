@@ -6,6 +6,7 @@ module.exports = function (app) {
 	var dateFormat = require('dateformat');
 	var timeStamp = Date.now();
 	var mysqlDB = require('../config/db');
+	var readDB = require('./readDB');
 	var _storage = multer.diskStorage({
 		destination: function (req, file, cb) {
 			cb(null, 'public/product_img/')
@@ -16,9 +17,18 @@ module.exports = function (app) {
 	});
     var upload = multer({ storage: _storage });
 
-	
-	router.get('/', function (req, res) {
+	router.get('/', async function (req, res) {
 		res.status(200);
+		var rows = await readDB('SELECT * FROM newbabodb.Product;');
+		res.render('items', {
+			login: req.session.login,
+			userid: req.session.userID,
+			username: req.session.username,
+			authority: req.session.authority,
+			page: 'categories',
+			items: rows
+		});
+		/*
 		mysqlDB.query('SELECT * FROM newbabodb.Product;', function(err, rows, fields ){
 			if(err){
 				console.log('query error :'+err);
@@ -32,6 +42,7 @@ module.exports = function (app) {
 				items: rows
 			});
 		})
+		*/
 		
 	});
 
@@ -46,15 +57,6 @@ module.exports = function (app) {
 			page: 'categories'
 		});
 	});
-
-	var readDB = function(query){
-		return new Promise(function(resolve, reject){
-			mysqlDB.query(query,  function(err, rows, fields ){
-				//var pd_id= rows.length+1;
-				resolve();
-			});
-		})
-	}
 	
 	router.post('/registration', upload.single('img1'),  async function (req, res) {
 		var pd_name = req.body['product_name'];
