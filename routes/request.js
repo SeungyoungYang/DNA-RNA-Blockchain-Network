@@ -2,9 +2,6 @@ module.exports = function (app) {
 
 	var express = require('express');
 	var router = express.Router();
-	//var mysqlDB = require('../config/db');
-
-	//var invoke = require('../blockchain/invoke-transaction.js');
 	var query = require('../blockchain/query.js');
 	var dna = require('../config/dna');
 	var readDB = require('./readDB');
@@ -46,41 +43,6 @@ module.exports = function (app) {
 		}catch (err) {
 			console.log(err);
 		}
-		/*
-        mysqlDB.query(queryString, async function (err, rows, fields) {
-            if (err) {
-                console.log('query error :' + err);
-            } else {
-                var args = [rows[0].RRN_hash];
-                var fcn = 'queryBySeller';
-                var _result;
-                try {
-                    _result = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, username, orgname);
-                    if (_result == '');
-                    else {
-                        var _results = _result.split('&&');
-                        for (var i = 0; i < _results.length; i++) {
-                            _results_json.push(JSON.parse(_results[i]));
-                        }
-                    }
-
-                    res.render('history', {
-                        login: req.session.login,
-                        userid: req.session.userID,
-                        username: req.session.username,
-                        authority: req.session.authority,
-                        page: 'null',
-                        result: _results_json,
-                        sellerID: req.params.args,
-                        type: _type
-                    });
-
-                } catch (err) {
-                    console.log(err);
-                }
-            }
-        })
-        */
 	});
 	
 
@@ -100,40 +62,6 @@ module.exports = function (app) {
 		var rows = await readDB(query);
 		await myinvoke(rows, 'match');
 		res.redirect('/product?pid=' + req.query.pid);
-
-		/*
-		mysqlDB.query(query3, async function (err, rows__, fields) {
-			if (err) {
-				console.log('query3 error :' + err);
-			} else {
-				mysqlDB.query(query2, [0, req.session.userID, req.query.pid, 1, 0], function (err, rows_, fields) {
-					if (err) {
-						console.log('query2 error :' + err);
-					} else {
-						mysqlDB.query(query, async function (err, rows, fields) {
-							if (err) {
-								console.log(rows);
-								console.log('query error :' + err);
-							} else {
-								try {
-									var fcn = 'tx_state';
-									//	  0	      1        2		  3 		  4        5         6	        7		 8	     9	   10
-									//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price  web
-									var args = [rows[1].Number.toString(), 'match', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), username];
-									await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
-								} catch (err) {
-									console.log('invoke error :' + err);
-								}
-							}
-
-						})
-						res.redirect('/product?pid=' + req.query.pid);
-					}
-				})
-			}
-
-		})*/
-
 	});
 	
 	router.post('/shipping', async function (req, res) {
@@ -157,26 +85,6 @@ module.exports = function (app) {
 		await myinvoke(rows, 'shipping');
 		
 		res.redirect('/user/items');
-		/*
-		mysqlDB.query(query, async function (err, rows, fields) {
-			if (err) {
-				console.log('query error :' + err);
-			} else {
-				try {
-					var fcn = 'tx_state';
-					//	  0	      1        2		  3 		  4        5         6	        7		 8	     9	   10
-					//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price  web
-					var args = [rows[1].Number.toString(), 'shipping', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), username];
-					await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
-					await readDB(invoicequery);
-					await readDB(changestatusquery);
-				} catch (err) {
-					console.log('invoke error :' + err);
-				}
-			}
-		})
-		res.redirect('/user/items');
-		*/
 	});
 
 	router.get('/finish', async function (req, res) {
@@ -195,37 +103,6 @@ module.exports = function (app) {
 		await myinvoke(rows,'finish');
 		await readDB(query2+rows[1].Number);
 		res.redirect('/product?pid=' + req.query.pid);
-		/*
-		mysqlDB.query(query3, async function (err, rows__, fields) {
-			if (err) {
-				console.log('query3 error :' + err);
-			} else {
-				mysqlDB.query(query, async function (err, rows, fields) {
-					if (err) {
-						console.log('query error :' + err);
-					} else {
-						try {
-							var fcn = 'tx_state';
-							//	  0	      1        2		  3 		  4        5         6	        7		 8	     9	   10
-							//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price  web
-							var args = [rows[1].Number.toString(), 'finish', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), username];
-							await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
-						} catch (err) {
-							console.log('invoke error :' + err);
-						}
-						mysqlDB.query(query2 + rows[1].Number, function (err, rows_, fields) {
-							if (err) {
-								console.log('query2 error :' + err);
-							} else {
-								res.redirect('/product?pid=' + req.query.pid);
-							}
-						})
-					}
-				})
-			}
-
-		})
-		*/
 	});
 
 	router.get('/cancel', async function (req, res) {
@@ -244,38 +121,6 @@ module.exports = function (app) {
 		await myinvoke(rows,'cancel');
 		await readDB(query2);
 		res.redirect('back');
-		/*
-		mysqlDB.query(query3, async function (err, rows__, fields) {
-			if (err) {
-				console.log('query3 error :' + err);
-			} else {
-
-				mysqlDB.query(query, async function (err, rows, fields) {
-					if (err) {
-						console.log('query error :' + err);
-					} else {
-						try {
-							var fcn = 'tx_state';
-							//	  0	      1        2		  3 		  4        5         6	        7		 8	     9	   10
-							//	txID  txState  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price  web
-							var args = [rows[1].Number.toString(), 'cancel', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), username];
-							await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
-						} catch (err) {
-							console.log('invoke error :' + err);
-						}
-						mysqlDB.query(query2, function (err, rows_, fields) {
-							if (err) {
-								console.log('query2 error :' + err);
-							} else {
-								res.redirect('back');
-							}
-						})
-					}
-				})
-			}
-
-		})
-		*/
 	});
 	
 	router.get('/report', async function (req, res) {
@@ -293,37 +138,6 @@ module.exports = function (app) {
 		await myinvoke(rows,'report');
 		await readDB(query2+rows[1].Number);
 		res.redirect('/user/requests');
-		/*
-		mysqlDB.query(query3, async function (err, rows__, fields) {
-			if (err) {
-				console.log('query3 error :' + err);
-			} else {
-				mysqlDB.query(query, async function (err, rows, fields) {
-					if (err) {
-						console.log('query error :' + err);
-					} else {
-						try {
-							var fcn = 'report';
-							//	  0	     1   	   2		 3 	   	     4        5          6	        7        8	     9     10
-							//	txID  details  sellerID  sellerName  sellerRRN  buyerID  buyerName  buyerRRN  product  price  web
-							var args = [rows[1].Number.toString(), 'report', rows[1].id, rows[1].Member_name, rows[1].RRN_hash, rows[0].id, rows[0].Member_name, rows[0].RRN_hash, rows[0].Product_name, rows[0].Product_price.toString(), username];
-							await invoke.invokeChaincode(peer, channelName, chaincodeName, fcn, args, username, orgname);
-						} catch (err) {
-							console.log('invoke error :' + err);
-						}
-						mysqlDB.query(query2 + rows[1].Number, function (err, rows_, fields) {
-							if (err) {
-								console.log('query2 error :' + err);
-							} else {
-								res.redirect('/user/requests');
-							}
-						})
-					}
-				})
-			}
-
-		})
-		*/
 	});
 
 	return router;

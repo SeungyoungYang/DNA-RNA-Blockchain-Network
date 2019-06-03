@@ -36,24 +36,40 @@
 
 				<div class="product_grid">
 					<% for (var index in items){%>
+						<!-- Product -->
+						<% if(items[index].status == 3) { %>
+							<div class="product">
+								<div class="product_image_sold"><img src= <%- items[index].img_path %> alt=""></div>
+								<div class="product_content">
+									<div class="product_title_sold">
+										<a href="product?pid=<%- items[index].Product_id%>"><%- items[index].Product_name %></a>
+									</div>
+									<div class="product_price_sold">
+										<%- items[index].Product_price %>원
+										<div class="product_status3"><span>거래 완료</span></div>	
+									</div>
+								</div>
+							</div>					
+						<% } else { %>
+							<div class="product">
+								<div class="product_image"><img src= <%- items[index].img_path %> alt=""></div>
+								<div class="product_content">
+									<div class="product_title">
+										<a href="product?pid=<%- items[index].Product_id%>"><%- items[index].Product_name %></a>
+									</div>
+									<div class="product_price">
+										<%- items[index].Product_price %>원
+										<% if(items[index].status == 0) { %>
+											<div class="product_status"><span>구매 신청 가능</span></div>	
+										
+										<% } else { %>
+											<div class="product_status2"><span>거래 진행중</span></div>
+										<% } %>
+									</div>
+								</div>
+							</div>
+						<% } %>
 
-					<!-- Product -->
-					<div class="product">
-						<div class="product_image"><img src= <%- items[index].img_path %> alt=""></div>
-						<div class="product_content">
-							<div class="product_title">
-								<a href="product?pid=<%- items[index].Product_id%>"><%- items[index].Product_name %></a>
-							</div>
-							<div class="product_price">
-								<%- items[index].Product_price %>원
-								<% if(items[index].status == 0) { %>
-									<div class="product_status"><span>구매 신청 가능</span></div>	
-								<% } else { %>
-									<div class="product_status2"><span>구매 진행중</span></div>
-								<% } %>
-							</div>
-						</div>
-					</div>
 					<% } %>
 				</div>
 				<div class="product_pagination" align=center>

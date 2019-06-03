@@ -37,7 +37,15 @@
 							<div class="cart_item_total">
 								<button class="write_button" onclick="location.href='/request/cancel?pid=<%- my_request[index].Product_id %>'">취소</button>
 							</div>
-							
+						<% } else if(my_request[index].status==2) { %>
+							<div class="cart_item_price">배송 중</div>
+							<!-- 구매자 -->
+							<div class="cart_item_buyer"><%- my_request[index].Member_id%></div>
+							<!-- Total -->
+							<div class="cart_item_total">
+								<button class="write_button" onclick="location.href='/request/finish?pid=<%- my_request[index].Product_id %>'">구매 확정</button>
+								<button class="write_button" onclick="location.href='/request/cancel?pid=<%- my_request[index].Product_id %>'">신고</button>
+							</div>
 						<% } else{ %>
 							<div class="cart_item_price">취소</div>
 							<!-- 구매자 -->
