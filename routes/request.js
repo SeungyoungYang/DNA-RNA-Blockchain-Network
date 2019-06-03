@@ -2,12 +2,13 @@ module.exports = function (app) {
 
 	var express = require('express');
 	var router = express.Router();
-	var mysqlDB = require('../config/db');
+	//var mysqlDB = require('../config/db');
 
-	var invoke = require('../blockchain/invoke-transaction.js');
+	//var invoke = require('../blockchain/invoke-transaction.js');
 	var query = require('../blockchain/query.js');
 	var dna = require('../config/dna');
 	var readDB = require('./readDB');
+	var myinvoke = require('./invoke')
 
 	var peer = dna.peer;
 	var channelName = dna.channelName;
@@ -21,7 +22,31 @@ module.exports = function (app) {
         var _type = req.query.type;
         var _results_json = new Array();
         var queryString = "SELECT RRN_hash FROM Member WHERE id = " + "'" + req.params.args + "'";
-        
+		var args = await readDB(queryString)[0].RRN_hash;
+		var fcn = 'queryBySeller';
+		try{
+			var _result = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, username, orgname);
+			if (_result == '');
+			else {
+				var _results = _result.split('&&');
+				for (var i = 0; i < _results.length; i++) {
+					_results_json.push(JSON.parse(_results[i]));
+				}
+			}
+			res.render('history', {
+				login: req.session.login,
+				userid: req.session.userID,
+				username: req.session.username,
+				authority: req.session.authority,
+				page: 'null',
+				result: _results_json,
+				sellerID: req.params.args,
+				type: _type
+			});
+		}catch (err) {
+			console.log(err);
+		}
+		/*
         mysqlDB.query(queryString, async function (err, rows, fields) {
             if (err) {
                 console.log('query error :' + err);
@@ -55,8 +80,9 @@ module.exports = function (app) {
                 }
             }
         })
-        
-    });
+        */
+	});
+	
 
 	router.get('/match', async function (req, res) {
 		var query = 'select id,Member_name,RRN_hash,Product_name,Product_price,Number\
@@ -69,6 +95,13 @@ module.exports = function (app) {
 		var query2 = 'insert into newbabodb.Order (invoice_number, Member_id, Product_id, Product_status,status_read) values(?,?,?,?,?)';
 		var query3 = 'UPDATE newbabodb.Product SET status=1 WHERE Product_id = ' + req.query.pid + ';';
 
+		await readDB(query3);
+		await readDB(query2, [0, req.session.userID, req.query.pid, 1, 0]);
+		var rows = await readDB(query);
+		await myinvoke(rows, 'match');
+		res.redirect('/product?pid=' + req.query.pid);
+
+		/*
 		mysqlDB.query(query3, async function (err, rows__, fields) {
 			if (err) {
 				console.log('query3 error :' + err);
@@ -99,7 +132,7 @@ module.exports = function (app) {
 				})
 			}
 
-		})
+		})*/
 
 	});
 	
@@ -118,6 +151,13 @@ module.exports = function (app) {
 							WHERE Number='+'\''+number+'\';';
 		var changestatusquery = 'UPDATE newbabodb.Product SET status=2 WHERE Product_id = ' + pid + ';';
 
+		var rows = await readDB(query);
+		await readDB(invoicequery);
+		await readDB(changestatusquery);
+		await myinvoke(rows, 'shipping');
+		
+		res.redirect('/user/items');
+		/*
 		mysqlDB.query(query, async function (err, rows, fields) {
 			if (err) {
 				console.log('query error :' + err);
@@ -136,7 +176,7 @@ module.exports = function (app) {
 			}
 		})
 		res.redirect('/user/items');
-
+		*/
 	});
 
 	router.get('/finish', async function (req, res) {
@@ -150,6 +190,12 @@ module.exports = function (app) {
 		var query2 = 'DELETE * newbabodb.Order WHERE Number = ';
 		var query3 = 'UPDATE newbabodb.Product SET status=3 WHERE Product_id = ' + req.query.pid + ';';
 
+		await readDB(query3);
+		var rows = await readDB(query);
+		await myinvoke(rows,'finish');
+		await readDB(query2+rows[1].Number);
+		res.redirect('/product?pid=' + req.query.pid);
+		/*
 		mysqlDB.query(query3, async function (err, rows__, fields) {
 			if (err) {
 				console.log('query3 error :' + err);
@@ -179,7 +225,7 @@ module.exports = function (app) {
 			}
 
 		})
-
+		*/
 	});
 
 	router.get('/cancel', async function (req, res) {
@@ -193,6 +239,12 @@ module.exports = function (app) {
 		var query2 = 'DELETE FROM newbabodb.Order WHERE Product_id='+'\''+req.query.pid+'\'';
 		var query3 = 'UPDATE newbabodb.Product SET status=0 WHERE Product_id = ' + req.query.pid + ';';
 
+		await readDB(query3);
+		var rows = await readDB(query);
+		await myinvoke(rows,'cancel');
+		await readDB(query2);
+		res.redirect('back');
+		/*
 		mysqlDB.query(query3, async function (err, rows__, fields) {
 			if (err) {
 				console.log('query3 error :' + err);
@@ -223,7 +275,7 @@ module.exports = function (app) {
 			}
 
 		})
-
+		*/
 	});
 	
 	router.get('/report', async function (req, res) {
@@ -236,7 +288,12 @@ module.exports = function (app) {
 					where id =(select Member_id from newbabodb.Product where Product_id = ' + req.query.pid + ') and Product.Product_id = ' + req.query.pid + ' and Order.Product_id = ' + req.query.pid;
 		var query2 = 'DELETE * newbabodb.Order WHERE Number = ';
 		var query3 = 'UPDATE newbabodb.Product SET status=4 WHERE Product_id = ' + req.query.pid + ';';
-
+		await readDB(query3);
+		var rows = await readDB(query);
+		await myinvoke(rows,'report');
+		await readDB(query2+rows[1].Number);
+		res.redirect('/user/requests');
+		/*
 		mysqlDB.query(query3, async function (err, rows__, fields) {
 			if (err) {
 				console.log('query3 error :' + err);
@@ -266,7 +323,7 @@ module.exports = function (app) {
 			}
 
 		})
-
+		*/
 	});
 
 	return router;

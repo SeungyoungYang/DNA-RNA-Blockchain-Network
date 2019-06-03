@@ -65,11 +65,8 @@ module.exports = function (app) {
 		var seller = req.session.userID;
 		var time=dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
 		var pd_img = '/product_img/'+req.file.filename;
-		//var pd_id = await readDB('SELECT * FROM newbabodb.Product;');
 		var queryString = 'insert into newbabodb.Product (img_path, Member_id, Product_price, Product_name, Product_content, date, status) values(?,?,?,?,?,?,?)';
-		mysqlDB.query(queryString,[pd_img,seller,pd_price,pd_name,pd_content,time,0],function(err,rows,field){
-			//console.log(err);
-		})
+		readDB(queryString,[pd_img,seller,pd_price,pd_name,pd_content,time,0]);
 		res.redirect('/items');
 	});
 
