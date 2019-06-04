@@ -53,15 +53,15 @@
 
 <body>
     <div class="container">
-        <h3 style="text-align: center; color: black">판매자 정보</h3>
-            <select id="docType" style="float: right" onchange="typeChange(this)">
+        <h3 style="text-align: center; color: black; margin-top: 20px">판매자 정보</h3>
+            <br><select id="docType" style="float: right" onchange="typeChange(this)">
                 <option value="all" <% if (type == "all") { %> selected <% } %>>전체</option>
                 <option value="transaction" <% if (type == "transaction") { %> selected <% } %>>거래이력</option>
                 <option value="report" <% if (type == "report") { %> selected <% } %>>신고이력</option>
                 </select><br><br>
             <script>
                 function typeChange(e) {
-                    window.location = "/test/history/<%- sellerID %>?type=" + e.value;
+                    window.location = "/request/history/<%- sellerID %>?type=" + e.value;
                 }
             </script>
         <div class="wrap">

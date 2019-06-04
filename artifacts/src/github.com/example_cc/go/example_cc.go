@@ -44,7 +44,7 @@ type doc struct {
 	SellerRRN	string 	`json:"sellerRRN"`
 	BuyerID		string 	`json:"buyerID"`
 	BuyerName	string 	`json:"buyerName"`
-	BuyerRRN	string	`json:"buyerRNN"`
+	BuyerRRN	string	`json:"buyerRRN"`
 	Product		string  `json:"product"`
 	Price 		string  `json:"price"`
 }
@@ -120,6 +120,10 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	if function == "queryBySeller" {
 		// queries an entity state
 		return t.queryBySeller(stub, args)
+	}
+	if function == "queryByBuyer" {
+		// queries an entity state
+		return t.queryByBuyer(stub, args)
 	}
 
 	logger.Errorf("Unknown action, check the first argument, must be one of 'delete', 'query', or 'move'. But got: %v", args[0])
@@ -395,6 +399,25 @@ func (t *SimpleChaincode) history(stub shim.ChaincodeStubInterface, args []strin
 func (t *SimpleChaincode) queryBySeller(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	//		0
+	//	sellerRRN
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+
+	sellerRRN := args[0]
+
+	queryString := fmt.Sprintf("{\"selector\":{\"sellerRRN\":\"%s\"}}", sellerRRN)
+
+	queryResults, err := getQueryResultForQueryString(stub, queryString)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(queryResults)
+}
+
+func (t *SimpleChaincode) queryByBuyer(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	//		0
 	//	buyerRRN
 	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
@@ -402,7 +425,7 @@ func (t *SimpleChaincode) queryBySeller(stub shim.ChaincodeStubInterface, args [
 
 	buyerRRN := args[0]
 
-	queryString := fmt.Sprintf("{\"selector\":{\"sellerRRN\":\"%s\"}}", buyerRRN)
+	queryString := fmt.Sprintf("{\"selector\":{\"buyerRRN\":\"%s\"}}", buyerRRN)
 
 	queryResults, err := getQueryResultForQueryString(stub, queryString)
 	if err != nil {

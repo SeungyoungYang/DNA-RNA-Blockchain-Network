@@ -30,7 +30,7 @@ module.exports = function (app) {
         var dateA = new Date(a.timestamp).getTime();
         var dateB = new Date(b.timestamp).getTime();
         return dateA < dateB ? 1 : -1;
-        };
+    };
         
     router.get('/history/:args', async function (req, res) {
         res.status(200);

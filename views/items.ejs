@@ -37,7 +37,7 @@
 				<div class="product_grid">
 					<% for (var index in items){%>
 						<!-- Product -->
-						<% if(items[index].status == 3) { %>
+						<% if(items[index].status == 3 || items[index].status == 4) { %>
 							<div class="product">
 								<div class="product_image_sold"><img src= <%- items[index].img_path %> alt=""></div>
 								<div class="product_content">

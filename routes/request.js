@@ -13,37 +13,47 @@ module.exports = function (app) {
 	var username = dna.username;
 	var orgname = dna.orgname;
 
+	function date_descending(a, b) {
+        var dateA = new Date(a.timestamp).getTime();
+        var dateB = new Date(b.timestamp).getTime();
+        return dateA < dateB ? 1 : -1;
+    };
+
 	router.get('/history/:args', async function (req, res) {
         res.status(200);
 
         var _type = req.query.type;
         var _results_json = new Array();
         var queryString = "SELECT RRN_hash FROM Member WHERE id = " + "'" + req.params.args + "'";
-		var args = await readDB(queryString)[0].RRN_hash;
+		
+		var rows = await readDB(queryString);
+		var args = [rows[0].RRN_hash];
 		var fcn = 'queryBySeller';
-		try{
-			var _result = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, username, orgname);
-			if (_result == '');
-			else {
-				var _results = _result.split('&&');
-				for (var i = 0; i < _results.length; i++) {
-					_results_json.push(JSON.parse(_results[i]));
-				}
+		var _result = await query.queryChaincode(peer, channelName, chaincodeName, args, fcn, username, orgname);
+		if (_result == '');
+		else {
+			var _results = _result.split('&&');
+			for (var i = 0; i < _results.length; i++) {
+				_results_json.push(JSON.parse(_results[i]));
 			}
-			res.render('history', {
-				login: req.session.login,
-				userid: req.session.userID,
-				username: req.session.username,
-				authority: req.session.authority,
-				page: 'null',
-				result: _results_json,
-				sellerID: req.params.args,
-				type: _type
-			});
-		}catch (err) {
-			console.log(err);
+			// sorting
+			if(_results.length>1){
+				_results_json.sort(date_descending);
+			}
+
 		}
-	});
+		res.render('history', {
+			login: req.session.login,
+			userid: req.session.userID,
+			username: req.session.username,
+			authority: req.session.authority,
+			page: 'null',
+			result: _results_json,
+			sellerID: req.params.args,
+			type: _type
+		});
+                
+    });
 	
 
 	router.get('/match', async function (req, res) {
@@ -102,7 +112,7 @@ module.exports = function (app) {
 		var rows = await readDB(query);
 		await myinvoke(rows,'finish');
 		await readDB(query2+rows[1].Number);
-		res.redirect('/product?pid=' + req.query.pid);
+		res.redirect('/user/requests');
 	});
 
 	router.get('/cancel', async function (req, res) {

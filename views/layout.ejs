@@ -40,7 +40,7 @@
                                         <li><a href="/">Home</a></li>
                                         <% } else if(login == "login") { %>
                                         <li class="hassubs active">
-                                            <a href="/userID">My Page</a>
+                                            <a>My Page</a>
                                             <ul>
                                                 <li><a href="/user/items">My Items</a></li>
                                                 <li><a href="/user/requests">My Requests</a></li>
@@ -55,7 +55,7 @@
                                     <a href="#ModalLogin" data-toggle="modal">로그인</a>
                                     <a href="#ModalJoin" data-toggle="modal">회원가입</a>
                                     <% } else if(login == "login") { %>
-                                    <a href="/user"><%- username %></a>
+                                    <a href="/user/history/<%- userid %>?flag=sell&type=all" onclick="window.open(this.href, '_blank', 'width=800, height=700, toolbars=no'); return false;"><%- username %></a>
                                     <a href="/logout">로그아웃</a>
 
                                     <% } %>

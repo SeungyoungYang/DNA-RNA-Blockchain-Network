@@ -24,7 +24,7 @@
 							<div class="availability">진행 상황:</div>
 							<span>구매 신청 가능</span>
 						</div>	
-					<% } else if(items[0].status==3){ %>	
+					<% } else if(items[0].status==3 || items[0].status == 4){ %>	
 						<div class="in_stock_container2">
 								<div class="availability">진행 상황:</div>
 								<span>거래 완료</span>
@@ -44,7 +44,7 @@
 					<div class="product_quantity_container">
 						<% if(items[0].status == 1) { %>
 							<div class="button cart_button"><a onclick="alert('구매가 진행중이므로 구매요청을 할 수 없습니다.');" >구매 요청</a></div>
-						<% } else if(items[0].status == 3){ %>
+						<% } else if(items[0].status == 3 || items[0].status == 4){ %>
 							<div class="button cart_button"><a >거래 완료</a></div>
 						<% } else if(login != "login"){ %>
 							<div class="button cart_button"><a onclick="alert('로그인이 필요한 서비스입니다.');" >구매 요청</a></div>
@@ -59,7 +59,7 @@
 							}	
 						</script>
 						<div class="button cart_button">
-							<a href="/test/history/<%- items[0].Member_id %>?type=all" onclick="window.open(this.href, '_blank', 'width=800, height=700, toolbars=no'); return false;">판매자 정보 보기</a>
+							<a href="/request/history/<%- items[0].Member_id %>?type=all" onclick="window.open(this.href, '_blank', 'width=800, height=700, toolbars=no'); return false;">판매자 정보 보기</a>
 						</div>
 					</div>
 
