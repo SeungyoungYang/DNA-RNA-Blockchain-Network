@@ -75,22 +75,22 @@ app.use(createSession());
 
 // ------- Set Routers -------
 var mainRouter = require('./routes/index.js')(app);
-var testRouter = require('./routes/test.js')(app);
+//var testRouter = require('./routes/test.js')(app);
 var itemsRouter = require('./routes/items.js')(app);
 var userRouter = require('./routes/user.js')(app);
 var productRouter = require('./routes/product.js')(app);
-var cartRouter = require('./routes/cart.js')(app);
-var checkoutRouter = require('./routes/checkout.js')(app);
+//var cartRouter = require('./routes/cart.js')(app);
+//var checkoutRouter = require('./routes/checkout.js')(app);
 var requestRouter = require('./routes/request.js')(app);
 
 
 app.use('/', mainRouter);
-app.use('/test', testRouter);
+//app.use('/test', testRouter);
 app.use('/items', itemsRouter);
 app.use('/user', userRouter);
 app.use('/product', productRouter);
-app.use('/cart', cartRouter);
-app.use('/checkout', checkoutRouter);
+//app.use('/cart', cartRouter);
+//app.use('/checkout', checkoutRouter);
 app.use('/request', requestRouter);
 // set secret variable
 
