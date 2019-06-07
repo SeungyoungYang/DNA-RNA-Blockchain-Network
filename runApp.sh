@@ -61,4 +61,6 @@ installNodeModules
 
 PORT=3000 node app &
 
+PORT=3001 node app2 &
+
 node init &
