@@ -133,19 +133,21 @@ module.exports = function (app) {
 		res.redirect('back');
 	});
 	
-	router.get('/report', async function (req, res) {
+	router.post('/report', async function (req, res) {
+		var report_value= req.body['rdo'];
+		var pid = req.body['pd_id'];
 		var query = 'select id,Member_name,RRN_hash,Product_name,Product_price,Number\
 					from newbabodb.Member, newbabodb.Product, newbabodb.Order\
-					where id =(select Member_id from newbabodb.Order where Product_id = ' + req.query.pid + ') and Product.Product_id = ' + req.query.pid + ' and Order.Product_id = ' + req.query.pid + '\
+					where id =(select Member_id from newbabodb.Order where Product_id = ' + pid + ') and Product.Product_id = ' + pid + ' and Order.Product_id = ' + pid + '\
 					union\
 					select id,Member_name,RRN_hash,Product_name,Product_price, Number\
 					from newbabodb.Member, newbabodb.Product, newbabodb.Order\
-					where id =(select Member_id from newbabodb.Product where Product_id = ' + req.query.pid + ') and Product.Product_id = ' + req.query.pid + ' and Order.Product_id = ' + req.query.pid;
+					where id =(select Member_id from newbabodb.Product where Product_id = ' + pid + ') and Product.Product_id = ' + pid + ' and Order.Product_id = ' + pid;
 		var query2 = 'DELETE * newbabodb.Order WHERE Number = ';
-		var query3 = 'UPDATE newbabodb.Product SET status=4 WHERE Product_id = ' + req.query.pid + ';';
+		var query3 = 'UPDATE newbabodb.Product SET status=4 WHERE Product_id = ' + pid + ';';
 		await readDB(query3);
 		var rows = await readDB(query);
-		await myinvoke(rows,'report');
+		await myinvoke(rows,'report',report_value);
 		await readDB(query2+rows[1].Number);
 		res.redirect('/user/requests');
 	});

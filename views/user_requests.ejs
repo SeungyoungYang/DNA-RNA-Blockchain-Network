@@ -44,7 +44,11 @@
 							<!-- Total -->
 							<div class="cart_item_total">
 								<button class="btn btn-success" onclick="location.href='/request/finish?pid=<%- my_request[index].Product_id %>'">구매 확정</button>
-								<button class="btn btn-danger" onclick="location.href='/request/report?pid=<%- my_request[index].Product_id %>'">거래 신고</button>
+								<!--button class="btn btn-danger" onclick="location.href='/request/report?pid=<%- my_request[index].Product_id %>'">거래 신고</button-->
+								<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#notify_<%- index %>"
+									aria-controls="notify_<%- index %>" aria-expanded="false" aria-label="Toggle navigation"><span class="dark-blue-text">
+										거래신고</span>
+								</button>
 							</div>
 						<% } else if(my_request[index].status==3){ %>
 							<div class="cart_item_price">거래완료</div>
@@ -66,8 +70,42 @@
 							<div class="cart_item_total">-</div>
 						<%} %>
 					</div>
+					<div class="collapse navbar-collapse" id="notify_<%- index %>" >	
+							<!--div class="invoice_form active"-->
+							<div class="container">
+								<div class="row">
+									<div class="cntr">
+										<form action="/request/report" method="post">
+											<label for="opt1_<%- index %>" class="radio">
+												<input type="radio" name="rdo" id="opt1_<%- index %>" class="hidden" value="잘못된 송장번호를 입력함"/>
+												<span class="label"></span>잘못된 송장번호를 입력함
+											</label>								
+											<label for="opt2_<%- index %>" class="radio">
+												<input type="radio" name="rdo" id="opt2_<%- index %>" class="hidden" value="물품이 사진과 다름"/>
+												<span class="label"></span>물품이 사진과 다름
+											</label>	
+											<label for="opt3_<%- index %>" class="radio">
+												<input type="radio" name="rdo" id="opt3_<%- index %>" class="hidden" value="물품에 하자가 있음"/>
+												<span class="label"></span>물품에 하자가 있음
+											</label>
+											<label for="opt4_<%- index %>" class="radio">
+												<input type="radio" name="rdo" id="opt4_<%- index %>" class="hidden" value="물품이 안옴"/>
+												<span class="label"></span>물품이 안옴
+											</label>
+											<label for="opt5_<%- index %>" class="radio">
+												<input type="radio" name="rdo" id="opt5_<%- index %>" class="hidden" value="기타"/>
+												<span class="label"></span>기타
+											</label>
+											<input type="hidden" name="pd_id" value=<%- my_request[index].Product_id %> />
+											<submit>
+												<button class="write_button"onclick="alert('신고가 접수되었습니다..')">확인</button>
+											</submit>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
 				<% } %>
-
 			</div>
 		</div>
 	</div>
